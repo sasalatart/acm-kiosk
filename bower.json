@@ -1,0 +1,30 @@
+{
+  "name": "acm-kiosk",
+  "description": "ACM-PUC's kiosk management application",
+  "main": "index.js",
+  "authors": [
+    "Sebastián Salata R-T <SA.SalataRT@GMail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "MEAN",
+    "ACM",
+    "Kiosk"
+  ],
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.9",
+    "angular-route": "~1.4.9",
+    "angular-resource": "~1.4.9",
+    "underscore": "~1.8.3",
+    "semantic": "semantic-ui#~2.1.8"
+  }
+}
