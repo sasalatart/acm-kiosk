@@ -1,0 +1,16 @@
+.horizontal-center {
+  display: flex;
+  justify-content: center;
+}
+
+.horizontal-center-space-around {
+  display: flex;
+  justify-content: space-around;
+}
+
+.vertical-center {
+  min-height: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
