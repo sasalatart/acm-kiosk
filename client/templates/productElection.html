@@ -5,15 +5,15 @@
   Tienes {{3 - nomineeCtrl.identity.votes.length}} votos disponibles
 </h3>
 
-<div class="horizontal-center">
-  <form class="ui form" ng-submit="nomineeCtrl.newNominee()">
+<div class="horizontal-center" ng-if="nomineeCtrl.identity.admin">
+  <form class="ui form" name="newNomineeForm" ng-submit="newNomineeForm.$valid && nomineeCtrl.newNominee()" novalidate>
     <div class="inline fields">
       <div class="field">
         <label for="name">Nombre del Producto</label>
-        <input id="name" name="name" ng-model="nomineeCtrl.nomineeForm.name" type="text">
+        <input id="name" name="name" ng-model="nomineeCtrl.nomineeForm.name" required type="text">
       </div>
       <div class="field">
-        <input type="submit" value="Ingresar Producto">
+        <input class="ui button" ng-class="{ 'disabled': !newNomineeForm.$valid }" type="submit" value="Crear">
       </div>
     </div>
   </form>
@@ -33,7 +33,7 @@
     <div class="ui basic green button" ng-click="nomineeCtrl.vote(nominee)">
       <i class="ui plus icon"></i>
     </div>
-    <div class="ui basic grey button" ng-click="nomineeCtrl.destroyNominee(nominee)">
+    <div class="ui basic grey button" ng-click="nomineeCtrl.destroyNominee(nominee)" ng-if="nomineeCtrl.identity.admin">
       <i class="ui remove icon"></i>
     </div>
     <div class="ui basic blue button" ng-click="nomineeCtrl.getVoters(nominee)">

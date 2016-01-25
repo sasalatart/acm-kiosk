@@ -54,3 +54,11 @@ progress + span {
   display: inline-block;
   height: inherit;
 }
+
+.ng-invalid {
+  border-color: #fa787e !important;
+}
+
+.ng-valid {
+  border-color: #78fa89 !important;
+}
