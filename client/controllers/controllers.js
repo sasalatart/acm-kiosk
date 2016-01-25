@@ -3,5 +3,5 @@
 
   require('./navBarController');
   require('./welcomeController');
-  require('./productElectionController');
+  require('./nomineeController');
 })();

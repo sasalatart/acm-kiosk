@@ -12,5 +12,9 @@
     vm.logout = function() {
       sessionService.logout();
     };
+
+    vm.getHeight = function() {
+      return (1.25 * $('.ui.fixed.menu').height()) + 'px';
+    };
   }
 })();

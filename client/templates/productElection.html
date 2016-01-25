@@ -1,3 +1,40 @@
-<div class="horizontal-align vertical-align">
-  <h1>Vota por tus productos favoritos!</h1>
+<h1 class="horizontal-center">
+  Vota por tus productos favoritos
+</h1>
+<h3 class="horizontal-center">
+  Tienes {{3 - nomineeCtrl.identity.votes.length}} votos disponibles
+</h3>
+
+<div class="horizontal-center">
+  <form class="ui form" ng-submit="nomineeCtrl.newNominee()">
+    <div class="inline fields">
+      <div class="field">
+        <label for="name">Nombre del Producto</label>
+        <input id="name" name="name" ng-model="nomineeCtrl.nomineeForm.name" type="text">
+      </div>
+      <div class="field">
+        <input type="submit" value="Ingresar Producto">
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="horizontal-center-space-between nominee" ng-repeat="nominee in nomineeCtrl.nominees">
+  <div class="progress-bar">
+    <progress id={{nominee.id}} max={{nomineeCtrl.totalVotes()}} value={{nominee.voters.length}}></progress>
+    <span>
+      {{nominee.name}}: {{nominee.voters.length}} votos
+    </span>
+  </div>
+  <div class="vote ui icon buttons">
+    <div class="ui basic red button" ng-click="nomineeCtrl.removeVote(nominee)">
+      <i class="ui minus icon"></i>
+    </div>
+    <div class="ui basic green button" ng-click="nomineeCtrl.vote(nominee)">
+      <i class="ui plus icon"></i>
+    </div>
+    <div class="ui basic button" ng-click="nomineeCtrl.destroyNominee(nominee)">
+      <i class="ui remove icon"></i>
+    </div>
+  </div>
 </div>

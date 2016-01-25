@@ -7,8 +7,8 @@
     var directive = {
       restrict: 'E',
       templateUrl: 'productElection.html',
-      controller: 'productElectionController',
-      controllerAs: 'productElectionCtrl'
+      controller: 'nomineeController',
+      controllerAs: 'nomineeCtrl'
     };
 
     return directive;

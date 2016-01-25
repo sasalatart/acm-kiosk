@@ -1,0 +1,56 @@
+.horizontal-center {
+  display: flex;
+  justify-content: center;
+}
+
+.horizontal-center-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vertical-center {
+  min-height: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.nominee {
+  margin: 0.5em 0;
+}
+
+.progress-bar {
+  height: 2.5em;
+  width: 85%;
+}
+
+progress {
+  background-color: #f3f3f3;
+  display: inline-block;
+  height: inherit;
+  width: 100%;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #e0eaf0;
+}
+
+progress::-webkit-progress-value {
+  background-color: #329ad1;
+}
+
+progress + span {
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 1.5em;
+  font-weight: bolder;
+  left: 2.5%;
+  line-height: 1.5em;
+  position: relative;
+  top: -1.75em;
+}
+
+.actions {
+  display: inline-block;
+  height: inherit;
+}

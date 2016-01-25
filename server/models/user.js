@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
+var nomineeSchema = require('./nominee').nomineeSchema;
+var _ = require('underscore');
 
-var userSchema = {
+var schema = {
   facebook: {
     id: {
       type: String,
@@ -22,11 +24,26 @@ var userSchema = {
       type: String,
       required: true
     }
-  }
-}
+  },
+  admin: {
+    type: Boolean,
+    required: true
+  },
+  votes: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'nomineeSchema'
+  }]
+};
 
-var userMongooseSchema = mongoose.Schema(userSchema);
+var userSchema = mongoose.Schema(schema);
 
-module.exports = mongoose.model('User', userMongooseSchema);
-module.exports.userMongooseSchema = userMongooseSchema;
+userSchema.path('votes').validate(function(votes) {
+  return votes.length <= 3;
+});
+
+userSchema.path('votes').validate(function(votes) {
+  return _.uniq(_.map(votes, String)).length === votes.length;
+});
+
+module.exports = mongoose.model('User', userSchema);
 module.exports.userSchema = userSchema;
