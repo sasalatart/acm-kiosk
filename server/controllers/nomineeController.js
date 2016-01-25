@@ -75,6 +75,19 @@ module.exports = {
     })
   },
 
+  getVoters: function(req, res) {
+    User.find({ votes: req.params.id }, function(err, users) {
+      if (err) {
+        res.status(500).json({ messages: 'Failed to get the voters.' });
+      } else {
+        mappedUsers = users.map(function(user) {
+          return { name: user.facebook.name, photo: user.facebook.photo };
+        });
+        res.status(200).json(mappedUsers);
+      }
+    })
+  },
+
   delete: function(req, res) {
     Nominee.remove({ _id: req.params.id }, function(err) {
       if (err) {

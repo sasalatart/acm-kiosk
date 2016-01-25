@@ -10,6 +10,7 @@
     vm.identity = null;
     vm.nomineeForm = {};
     vm.nominees = [];
+    vm.selectedNominee = {};
 
     sessionService.identity().then(function(identity) {
       if (!identity) {
@@ -65,6 +66,21 @@
             .success(function() {
               nominee.voters.splice(nominee.voters.indexOf(vm.identity._id), 1);
               vm.removeMyNominee(nominee);
+            })
+            .error(function(error) {
+              console.log(error);
+            });
+        };
+
+        vm.getVoters = function(nominee) {
+          vm.selectedNominee.name = nominee.name;
+          $http({
+              method: 'GET',
+              url: '/nominees/' + nominee._id + '/getVoters'
+            })
+            .success(function(users) {
+              vm.selectedNominee.voters = users;
+              $('.ui.long.modal').modal('show');
             })
             .error(function(error) {
               console.log(error);

@@ -17,5 +17,6 @@ module.exports = function(app, passport) {
   app.post('/nominees', nomineeController.create);
   app.put('/nominees/:id/vote', nomineeController.vote);
   app.put('/nominees/:id/removeVote', nomineeController.removeVote);
+  app.get('/nominees/:id/getVoters', nomineeController.getVoters);
   app.delete('/nominees/:id', nomineeController.delete);
 }

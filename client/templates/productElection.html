@@ -33,8 +33,24 @@
     <div class="ui basic green button" ng-click="nomineeCtrl.vote(nominee)">
       <i class="ui plus icon"></i>
     </div>
-    <div class="ui basic button" ng-click="nomineeCtrl.destroyNominee(nominee)">
+    <div class="ui basic grey button" ng-click="nomineeCtrl.destroyNominee(nominee)">
       <i class="ui remove icon"></i>
+    </div>
+    <div class="ui basic blue button" ng-click="nomineeCtrl.getVoters(nominee)">
+      <i class="ui search icon"></i>
+    </div>
+  </div>
+</div>
+
+<div class="ui long modal">
+  <i class="close icon"></i>
+  <h1 class="horizontal-center">
+    Votantes de {{nomineeCtrl.selectedNominee.name}}
+  </h1>
+  <div class="horizontal-center flex-column">
+    <div ng-repeat="voter in nomineeCtrl.selectedNominee.voters">
+      <img class="ui avatar image" src="{{voter.photo}}">
+      <span>{{voter.name}}</span>
     </div>
   </div>
 </div>
