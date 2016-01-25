@@ -19,7 +19,7 @@
   </form>
 </div>
 
-<div class="horizontal-center-space-between nominee" ng-repeat="nominee in nomineeCtrl.nominees">
+<div class="horizontal-center-space-between nominee" ng-repeat="nominee in nomineeCtrl.nominees | orderBy : '-voters.length'">
   <div class="progress-bar">
     <progress id={{nominee.id}} max={{nomineeCtrl.totalVotes()}} value={{nominee.voters.length}}></progress>
     <span>
