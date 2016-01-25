@@ -11,9 +11,7 @@ module.exports = function(passport) {
             }
           })
         } else {
-          res.status(404).send({
-            messages: info.message
-          })
+          res.status(404).send({ messages: info.message });
         }
       })(req, res, next);
     },
@@ -21,7 +19,23 @@ module.exports = function(passport) {
     logout: function(req, res) {
       req.session.destroy(function(err) {
         res.redirect('/');
-      })
+      });
+    },
+
+    isAuthenticated: function(req, res, next) {
+      if (req.user) {
+        return next();
+      } else {
+        res.redirect('/');
+      }
+    },
+
+    isAdmin: function(req, res, next) {
+      if (req.user && req.user.admin) {
+        return next();
+      } else {
+        res.redirect('/');
+      }
     },
 
     getUser: function(req, res) {

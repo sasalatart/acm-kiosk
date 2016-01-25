@@ -38,14 +38,25 @@ module.exports = function(passport) {
           newUser.facebook.name = profile.displayName;
           newUser.facebook.photo = profile.photos[0].value;
 
-          newUser.save(function(err) {
+          User.count({}, function(err, count) {
             if (err) {
               throw err;
             } else {
-              console.log(newUser);
-              return done(null, newUser);
+              if (count === 0) {
+                newUser.admin = true;
+              } else {
+                newUser.admin = false;
+              }
+
+              newUser.save(function(err) {
+                if (err) {
+                  throw err;
+                } else {
+                  return done(null, newUser);
+                }
+              });
             }
-          })
+          });
         }
       })
     })
