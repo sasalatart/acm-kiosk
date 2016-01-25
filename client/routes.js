@@ -7,11 +7,16 @@
         templateUrl: 'welcome.html',
         controller: 'welcomeController',
         controllerAs: 'welcomeCtrl'
-      }).
-      when('/productElection', {
+      })
+      .when('/productElection', {
         template: '<product-election></product-election>'
-      }).
-      otherwise({
+      })
+      .when('/users', {
+        templateUrl: 'users.html',
+        controller: 'userController',
+        controllerAs: 'userCtrl'
+      })
+      .otherwise({
         redirectTo: '/'
       });
   }

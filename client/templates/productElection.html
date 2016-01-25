@@ -47,10 +47,10 @@
   <h1 class="horizontal-center">
     Votantes de {{nomineeCtrl.selectedNominee.name}}
   </h1>
-  <div class="horizontal-center flex-column">
+  <div class="users">
     <div ng-repeat="voter in nomineeCtrl.selectedNominee.voters">
-      <img class="ui avatar image" src="{{voter.photo}}">
-      <span>{{voter.name}}</span>
+      <img class="ui avatar image" src="{{voter.facebook.photo}}">
+      <span>{{voter.facebook.name}}</span>
     </div>
   </div>
 </div>

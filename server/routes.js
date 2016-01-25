@@ -1,6 +1,7 @@
 module.exports = function(app, passport) {
   var sessionController = require('./controllers/sessionController')(passport);
   var nomineeController = require('./controllers/nomineeController');
+  var userController = require('./controllers/userController');
 
   app.get('/', function(req, res) {
     res.sendFile('client/templates/index.html', {
@@ -19,4 +20,7 @@ module.exports = function(app, passport) {
   app.put('/nominees/:id/removeVote', sessionController.isAuthenticated, nomineeController.removeVote);
   app.get('/nominees/:id/getVoters', sessionController.isAuthenticated, nomineeController.getVoters);
   app.delete('/nominees/:id', sessionController.isAdmin, nomineeController.delete);
+
+  app.get('/users', sessionController.isAuthenticated, userController.index);
+  app.put('/users/:id/toggleAdmin', sessionController.isAdmin, userController.toggleAdmin);
 }

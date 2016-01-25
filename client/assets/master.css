@@ -62,3 +62,13 @@ progress + span {
 .ng-valid {
   border-color: #78fa89 !important;
 }
+
+i.ui.arrow.circle.icon {
+  cursor: pointer;
+}
+
+.users {
+  -webkit-columns: 3 25em;
+  -moz-columns: 3 25em;
+  columns: 3 25em;
+}

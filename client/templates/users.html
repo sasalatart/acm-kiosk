@@ -1,0 +1,23 @@
+<h1 class="horizontal-center">
+  Usuarios
+</h1>
+
+<div class="horizontal-center">
+  <div class="ui search">
+    <div class="ui icon input">
+      <input class="prompt" placeholder="Buscar..." type="text" ng-model="searchText">
+      <i class="search icon"></i>
+    </div>
+  </div>
+</div>
+
+<div class="users">
+  <div ng-repeat="user in userCtrl.users | orderBy : 'facebook.name' | filter : searchText">
+    <img class="ui avatar image" src="{{user.facebook.photo}}">
+    <span>{{user.facebook.name}}</span>
+    <span ng-click="userCtrl.toggleAdmin(user)" ng-if="userCtrl.sessionService.getIdentity().admin">
+      <i class="ui red arrow circle down icon" ng-if="user.admin"></i>
+      <i class="ui green arrow circle up icon" ng-if="!user.admin"></i>
+    </span>
+  </div>
+</div>

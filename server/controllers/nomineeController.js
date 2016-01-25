@@ -80,10 +80,7 @@ module.exports = {
       if (err) {
         res.status(500).json({ messages: 'Failed to get the voters.' });
       } else {
-        mappedUsers = users.map(function(user) {
-          return { name: user.facebook.name, photo: user.facebook.photo };
-        });
-        res.status(200).json(mappedUsers);
+        res.status(200).json(users);
       }
     })
   },

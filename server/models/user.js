@@ -45,5 +45,16 @@ userSchema.path('votes').validate(function(votes) {
   return _.uniq(_.map(votes, String)).length === votes.length;
 });
 
+userSchema.methods.toggleAdmin = function() {
+  this.admin = !this.admin;
+  this.save();
+};
+
+userSchema.methods.toJSON = function() {
+  var object = this.toObject();
+  delete object.facebook.token;
+  return object;
+};
+
 module.exports = mongoose.model('User', userSchema);
 module.exports.userSchema = userSchema;
