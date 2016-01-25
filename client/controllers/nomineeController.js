@@ -103,6 +103,14 @@
             vm.identity.votes.splice(index, 1);
           }
         };
+
+        vm.containsMyVote = function(nominee) {
+          return nominee.voters.indexOf(vm.identity._id) !== -1;
+        };
+
+        vm.canVote = function() {
+          return vm.identity.votes.length < 3;
+        };
       }
     });
   }

@@ -27,10 +27,10 @@
     </span>
   </div>
   <div class="vote ui icon buttons">
-    <div class="ui basic red button" ng-click="nomineeCtrl.removeVote(nominee)">
+    <div class="ui basic red button" ng-click="nomineeCtrl.removeVote(nominee)" ng-if="nomineeCtrl.containsMyVote(nominee)">
       <i class="ui minus icon"></i>
     </div>
-    <div class="ui basic green button" ng-click="nomineeCtrl.vote(nominee)">
+    <div class="ui basic green button" ng-click="nomineeCtrl.vote(nominee)" ng-if="!nomineeCtrl.containsMyVote(nominee) && nomineeCtrl.canVote()">
       <i class="ui plus icon"></i>
     </div>
     <div class="ui basic grey button" ng-click="nomineeCtrl.destroyNominee(nominee)" ng-if="nomineeCtrl.identity.admin">
