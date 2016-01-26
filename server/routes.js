@@ -19,6 +19,7 @@ module.exports = function(app, passport) {
   app.put('/nominees/:id/vote', sessionController.isAuthenticated, nomineeController.vote);
   app.put('/nominees/:id/removeVote', sessionController.isAuthenticated, nomineeController.removeVote);
   app.get('/nominees/:id/getVoters', sessionController.isAuthenticated, nomineeController.getVoters);
+  app.get('/nominees/resetVoters', sessionController.isAdmin, nomineeController.resetVoters);
   app.delete('/nominees/:id', sessionController.isAdmin, nomineeController.delete);
 
   app.get('/users', sessionController.isAuthenticated, userController.index);

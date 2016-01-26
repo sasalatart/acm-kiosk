@@ -13,7 +13,10 @@
         <input id="name" name="name" ng-model="nomineeCtrl.nomineeForm.name" required type="text">
       </div>
       <div class="field">
-        <input class="ui button" ng-class="{ 'disabled': !newNomineeForm.$valid }" type="submit" value="Crear">
+        <input class="ui green button" ng-class="{ 'disabled': !newNomineeForm.$valid }" type="submit" value="Crear">
+        <button class="ui red button" type="button" ng-click="nomineeCtrl.resetVoters()">
+          Reset Votes
+        </button>
       </div>
     </div>
   </form>

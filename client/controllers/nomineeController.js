@@ -87,6 +87,22 @@
             });
         };
 
+        vm.resetVoters = function() {
+          $http({
+            mthod: 'GET',
+            url: 'nominees/resetVoters'
+          })
+          .success(function() {
+            vm.nominees.forEach(function(nominee) {
+              nominee.voters = [];
+            });
+            vm.identity.votes = [];
+          })
+          .error(function(error) {
+            console.log(error);
+          });
+        };
+
         vm.totalVotes = function() {
           return (vm.nominees)
             .map(function(nominee) {

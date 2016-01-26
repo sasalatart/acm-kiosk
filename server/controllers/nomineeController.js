@@ -85,6 +85,28 @@ module.exports = {
     })
   },
 
+  resetVoters: function(req, res) {
+    Nominee.find({}, function(err, nominees) {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        async.each(nominees, function(nominee) {
+          nominee.voters = [];
+          nominee.save();
+        }, User.find({}, function(err, users) {
+          if (err) {
+            res.status(500).json(err);
+          } else {
+            async.each(users, function(user) {
+              user.votes = [];
+              user.save();
+            }, res.status(200).json({}));
+          }
+        }));
+      }
+    });
+  },
+
   delete: function(req, res) {
     Nominee.remove({ _id: req.params.id }, function(err) {
       if (err) {
