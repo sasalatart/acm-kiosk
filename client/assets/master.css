@@ -3,6 +3,11 @@
   justify-content: center;
 }
 
+.horizontal-center-space-around {
+  display: flex;
+  justify-content: space-around;
+}
+
 .horizontal-center-space-between {
   display: flex;
   justify-content: space-between;
@@ -71,4 +76,12 @@ i.ui.arrow.circle.icon {
   -webkit-columns: 3 25em;
   -moz-columns: 3 25em;
   columns: 3 25em;
+}
+
+td input[type="text"] {
+  width: 7em;
+}
+
+td input[type="number"] {
+  width: 4em;
 }

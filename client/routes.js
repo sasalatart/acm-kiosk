@@ -16,6 +16,11 @@
         controller: 'userController',
         controllerAs: 'userCtrl'
       })
+      .when('/accounting', {
+        templateUrl: 'accounting.html',
+        controller: 'productController',
+        controllerAs: 'productCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

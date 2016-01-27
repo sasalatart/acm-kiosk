@@ -1,0 +1,105 @@
+<h1 class="horizontal-center">
+  Bodega
+</h1>
+
+<div class="horizontal-center" ng-if="productCtrl.action === 'add'">
+  <form class="ui form" name="productCtrl.newForm" novalidate>
+    <div class="fields">
+      <div class="field">
+        <label for="name">Nombre</label>
+        <input id="name" ng-model="productCtrl.productForm.name" required type="text">
+      </div>
+      <div class="field">
+        <label for="cost-box">Costo/Caja</label>
+        <input id="cost-box" ng-model="productCtrl.productForm.costPerPack" required type="number">
+      </div>
+      <div class="field">
+        <label for="units-box">Unidades/Caja</label>
+        <input id="units-box" ng-model="productCtrl.productForm.unitsPerPack" required type="number">
+      </div>
+      <div class="field">
+        <label for="price-unit">Precio/Unidad</label>
+        <input id="price-unit" ng-model="productCtrl.productForm.price" required type="number">
+      </div>
+    </div>
+  </form>
+</div>
+
+<table class="ui structured compact table">
+  <thead>
+    <tr class="center aligned">
+      <th rowspan="2">Nombre</th>
+      <th colspan="2">Cajas</th>
+      <th rowspan="2">Unidades/Caja</th>
+      <th rowspan="2">Costo/Caja</th>
+      <th rowspan="2">Costo/Unidad</th>
+      <th rowspan="2">Precio</th>
+      <th rowspan="2">Balance</th>
+      <th colspan="2">Acciones</th>
+    </tr>
+    <tr class="center aligned">
+      <th>en Kiosko</th>
+      <th>en Bodega</th>
+      <th>
+        <select ng-model="productCtrl.action">
+          <option value="add">Agregar Producto</option>
+          <option value="buy">Registrar Compra</option>
+          <option value="move">Mover a Kiosko</option>
+        </select>
+        <input class="ui button" type="submit" ng-if="productCtrl.action === 'add'" ng-class="{ 'disabled': !productCtrl.newForm.$valid }" ng-click="productCtrl.newForm.$valid && productCtrl.newProduct()"></input>
+        <input class="ui button" type="submit" ng-if="productCtrl.action === 'buy'" ng-click="productCtrl.buyProducts()"></input>
+        <input class="ui button" type="submit" ng-if="productCtrl.action === 'move'" ng-click="productCtrl.moveProducts()"></input>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="center aligned" ng-repeat="product in productCtrl.products">
+      <td>
+        <span ng-if="!product.editing">{{ product.name }}</span>
+        <input ng-model="product.editName" ng-if="product.editing" type="text" placeholder="{{ product.name }}">
+      </td>
+      <td>
+        {{ product.packsDisplayed }}
+      </td>
+      <td>
+        {{ product.packsStored }}
+      </td>
+      <td>
+        <span ng-if="!product.editing">{{ product.unitsPerPack }}</span>
+        <input ng-model="product.editUnitsPerPack" ng-if="product.editing" type="number" placeholder="{{ product.unitsPerPack }}">
+      </td>
+      <td>
+        <span ng-if="!product.editing">{{ product.costPerPack }}</span>
+        <input ng-model="product.editCostPerPack" ng-if="product.editing" type="number" placeholder="{{ product.costPerPack }}">
+      </td>
+      <td>
+        {{ productCtrl.costPerUnit(product) }}
+      </td>
+      <td>
+        <span ng-if="!product.editing">{{ product.price }}</span>
+        <input ng-model="product.editPrice" ng-if="product.editing" type="number" placeholder="{{ product.price }}">
+      </td>
+      <td>
+        {{ productCtrl.profitForBox(product) }}
+      </td>
+      <td>
+        <span ng-if="productCtrl.action !== 'buy' && productCtrl.action !== 'move'">
+          <button ng-click="product.editing = !product.editing" ng-if="!product.editing">
+            Edit
+          </button>
+          <button ng-click="productCtrl.deleteProduct(product)" ng-if="!product.editing">
+            Delete
+          </button>
+          <button ng-click="productCtrl.updateProduct(product)" ng-if="product.editing">
+            Save
+          </button>
+          <button ng-click="product.editing = !product.editing" ng-if="product.editing">
+            Cancel
+          </button>
+        </span>
+        <input ng-model="product.quantityBought" ng-if="productCtrl.action === 'buy'" type="number" placeholder="0">
+        <input ng-model="product.quantityToMove" ng-if="productCtrl.action === 'move'" type="number" placeholder="0">
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,6 +1,7 @@
 module.exports = function(app, passport) {
   var sessionController = require('./controllers/sessionController')(passport);
   var nomineeController = require('./controllers/nomineeController');
+  var productController = require('./controllers/productController');
   var userController = require('./controllers/userController');
 
   app.get('/', function(req, res) {
@@ -24,4 +25,11 @@ module.exports = function(app, passport) {
 
   app.get('/users', sessionController.isAuthenticated, userController.index);
   app.put('/users/:id/toggleAdmin', sessionController.isAdmin, userController.toggleAdmin);
+
+  app.get('/products', sessionController.isAdmin, productController.index);
+  app.post('/products', sessionController.isAdmin, productController.create);
+  app.put('/products/:id', sessionController.isAdmin, productController.update);
+  app.post('/products/buy', sessionController.isAdmin, productController.buy);
+  app.post('/products/move', sessionController.isAdmin, productController.move);
+  app.delete('/products/:id', sessionController.isAdmin, productController.delete);
 }
