@@ -73,7 +73,7 @@
           vm.products.forEach(function(product) {
             cartOrder.push({
               _id: product._id,
-              bought: product.quantityBought
+              bought: product.quantityBought || 0
             });
           });
 
@@ -101,7 +101,7 @@
           vm.products.forEach(function(product) {
             productsToMove.push({
               _id: product._id,
-              quantity: product.quantityToMove
+              quantity: product.quantityToMove || 0
             });
           });
 

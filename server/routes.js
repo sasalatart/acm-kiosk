@@ -10,7 +10,9 @@ module.exports = function(app, passport) {
     });
   });
 
-  app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
+  app.get('/auth/facebook', passport.authenticate('facebook', {
+    scope: 'email'
+  }));
   app.get('/auth/facebook/callback', sessionController.login);
   app.get('/logout', sessionController.isAuthenticated, sessionController.logout);
   app.get('/getUser', sessionController.getUser);
@@ -32,4 +34,12 @@ module.exports = function(app, passport) {
   app.post('/products/buy', sessionController.isAdmin, productController.buy);
   app.post('/products/move', sessionController.isAdmin, productController.move);
   app.delete('/products/:id', sessionController.isAdmin, productController.delete);
+
+  app.use((err, req, res, next) => {
+    if (process.env.NODE_ENV && process.env.NODE_ENV.toUpperCase() === 'PRODUCTION') {
+      delete err.stack;
+    } else {
+      res.status(err.statusCode || 500).json(err);
+    }
+  });
 }

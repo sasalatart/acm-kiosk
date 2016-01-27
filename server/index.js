@@ -1,6 +1,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
+var bluebird = require('bluebird');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
@@ -11,6 +12,7 @@ var app = express();
 var DB_HOST = process.env.DATABASE_HOST || 'mongo_db';
 var DB_PORT = process.env.DATABASE_PORT || '27017';
 mongoose.connect('mongodb://' + DB_HOST + ':' + DB_PORT + '/acmKiosk');
+mongoose.Promise = bluebird;
 
 require('./config/passport')(passport);
 

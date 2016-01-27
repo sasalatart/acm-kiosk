@@ -1,24 +1,17 @@
 var User = require('../models/user');
 
 module.exports = {
-  index: function(req, res) {
-    User.find({}, function(err, users) {
-      if (err) {
-        res.status(500).json(err);
-      } else {
-        res.status(200).json(users);
-      }
-    });
+  index: (req, res, next) => {
+    User.find({})
+      .then(users => res.status(200).json(users))
+      .catch(next);
   },
 
-  toggleAdmin: function(req, res) {
-    User.findOne({ _id: req.params.id }, function(err, user) {
-      if (err) {
-        res.status(500).json(err);
-      } else {
-        user.toggleAdmin();
-        res.status(200).json(user)
-      }
+  toggleAdmin: (req, res, next ) => {
+    User.findOne({ _id: req.params.id }).then(user => {
+      user.toggleAdmin();
+      res.status(200).json(user);
     })
+    .catch(next);
   }
 };

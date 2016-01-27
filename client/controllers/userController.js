@@ -8,7 +8,7 @@
   function userController(sessionService, $http) {
     var vm = this;
     vm.sessionService = sessionService;
-    vm.users = {};
+    vm.users = [];
 
     sessionService.identity().then(function(identity) {
       if (!identity) {

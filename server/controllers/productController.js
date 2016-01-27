@@ -1,116 +1,79 @@
-var async = require('async');
 var Product = require('../models/product');
 var Cart = require('../models/cart');
 
 module.exports = {
-  index: function(req, res) {
-    Product.find({}, function(err, products) {
-      if (err) {
-        res.status(500).json(err);
-      } else {
-        res.status(200).json(products);
-      }
-    });
+  index: (req, res, next) => {
+    Product.find({})
+      .then(products => { res.status(200).json(products); })
+      .catch(next);
   },
 
-  create: function(req, res) {
+  create: (req, res, next) => {
     var newProduct = new Product();
     newProduct.name = req.body.name;
     newProduct.costPerPack = req.body.costPerPack;
     newProduct.unitsPerPack = req.body.unitsPerPack;
     newProduct.price = req.body.price;
-
-    newProduct.save(function(err) {
-      if (err) {
-        res.status(400).json({ messages: 'Failed to create your new product.' });
-      } else {
-        res.status(201).json(newProduct);
-      }
-    });
+    newProduct.save()
+      .then(res.status(201).json(newProduct))
+      .catch(next);
   },
 
-  update: function(req, res) {
-    Product.findOne({ _id: req.params.id }, function(err, product) {
-      if (err) {
-        res.status(500).json(err);
-      } else {
-        product.name = req.body.name;
-        product.costPerPack = req.body.costPerPack;
-        product.unitsPerPack = req.body.unitsPerPack;
-        product.price = req.body.price;
-        product.save(function(err) {
-          if (err) {
-            res.status(400).json(err);
-          } else {
-            res.status(200).json(product);
-          }
-        });
-      }
-    });
-  },
-
-  delete: function(req, res) {
-    Product.remove({ _id: req.params.id }, function(err) {
-      if (err) {
-        res.status(404).json(err);
-      } else {
-        res.status(202).json({});
-      }
+  update: (req, res, next) => {
+    Product.findOne({ _id: req.params.id }).then(product => {
+      product.name = req.body.name;
+      product.costPerPack = req.body.costPerPack;
+      product.unitsPerPack = req.body.unitsPerPack;
+      product.price = req.body.price;
+      product.save().then(res.status(200).json(product));
     })
+    .catch(next);
   },
 
-  buy: function(req, res) {
+  delete: (req, res, next) => {
+    Product.remove({ _id: req.params.id })
+      .then(res.status(202).json({}))
+      .catch(next);
+  },
+
+  buy: (req, res, next) => {
     var newCart = new Cart();
+    var ids = req.body.cartOrder.map(product => product._id);
 
-    async.eachSeries(req.body.cartOrder, function(productOrdered) {
-      Product.findOne({ _id: productOrdered._id }, function(err, product) {
-        if (err) {
-          throw err;
-        } else {
-          product.packsStored += productOrdered.bought;
-          product.boughtLastTime = productOrdered.bought;
-          product.save(function(err) {
-            if (err) {
-              throw err;
-            } else {
-              newCart.products.push(product);
-            }
-          });
-        }
-      });
-    }, newCart.save(function(err) {
-      if (err) {
-        //rollback here
-        res.status(500).json(err);
-      } else {
-        res.status(201).json(newCart);
-      }
-    }));
+    function findElement(array, propName, propValue) {
+      for (var i = 0; i < array.length; i++)
+        if (array[i][propName] == propValue)
+          return array[i];
+    }
+
+    Product.find({ _id: { $in: ids } }).then(products => {
+      Promise.all(products.map(product => {
+        var productOrdered = findElement(req.body.cartOrder, '_id', product._id);
+        product.packsStored += productOrdered.bought;
+        product.boughtLastTime = productOrdered.bought;
+        return product.save().then(newCart.products.push(product));
+      })).then(newCart.save().then(res.status(201).json(newCart)));
+    })
+    .catch(next);
   },
 
-  move: function(req, res) {
-    var promises = req.body.productsToMove.map(function(productToMove) {
-      return new Promise(function(resolve, reject) {
-        Product.findOne({ _id: productToMove._id }, function(err, product) {
-          if (err) {
-            return reject(err);
-          } else {
-            product.packsStored -= productToMove.quantity;
-            product.packsDisplayed += productToMove.quantity;
-            product.save(function(err) {
-              if (err) {
-                return reject (err);
-              } else {
-                return resolve(product);
-              }
-            });
-          }
-        });
-      });
-    });
+  move: (req, res, next) => {
+    var ids = req.body.productsToMove.map(product => product._id);
 
-    Promise.all(promises)
-      .then(function(products) { res.status(200).json(products) })
-      .catch(console.error);
+    function findElement(array, propName, propValue) {
+      for (var i = 0; i < array.length; i++)
+        if (array[i][propName] == propValue)
+          return array[i];
+    }
+
+    Product.find({ _id: { $in: ids } }).then(products => {
+      Promise.all(products.map(product => {
+        var productToMove = findElement(req.body.productsToMove, '_id', product._id);
+        product.packsStored -= productToMove.quantity;
+        product.packsDisplayed += productToMove.quantity;
+        return product.save();
+      })).then(res.status(200).json(products))
+    })
+    .catch(next);
   }
 }

@@ -1,132 +1,78 @@
-var async = require('async');
 var ObjectId = require('mongoose').Types.ObjectId;
 var Nominee = require('../models/nominee');
 var User = require('../models/user');
 
 module.exports = {
-  index: function(req, res) {
-    Nominee.find({}, function(err, nominees) {
-      if (err) {
-        res.status(500).json(err);
-      } else {
-        res.status(200).json(nominees);
-      }
-    });
+  index: (req, res, next) => {
+    Nominee.find({})
+      .then(nominees => res.status(200).json(nominees))
+      .catch(next);
   },
 
-  create: function(req, res) {
+  create: (req, res, next) => {
     var newNominee = new Nominee();
     newNominee.name = req.body.name;
-
-    newNominee.save(function(err) {
-      if (err) {
-        res.status(400).json({ messages: 'Failed to create your new product.' });
-      } else {
-        res.status(201).json(newNominee);
-      }
-    });
+    newNominee.save()
+      .then(res.status(201).json(newNominee))
+      .catch(next);
   },
 
-  vote: function(req, res) {
+  vote: (req, res, next) => {
     req.user.votes.push(req.params.id);
-    req.user.save(function(err) {
-      if (err) {
-        res.status(400).json({ messages: err });
-      } else {
-        Nominee.findOne({ _id: req.params.id }, function(err, nominee) {
-          if (err) {
-            res.status(400).json({ messages: err });
-          } else {
-            nominee.voters.push(req.user._id);
-            nominee.save(function(err) {
-              if (err) {
-                res.status(400).json({ messages: err });
-              } else {
-                res.status(200).json(nominee);
-              }
-            });
-          }
-        });
-      }
-    });
+    req.user.save().then(() => {
+      Nominee.findOne({ _id: req.params.id }).then(nominee => {
+        nominee.voters.push(req.user._id);
+        nominee.save().then(res.status(200).json(nominee));
+      })
+    })
+    .catch(next);
   },
 
-  removeVote: function(req, res) {
+  removeVote: (req, res, next) => {
     req.user.votes.remove(ObjectId(req.params.id));
-    req.user.save(function(err) {
-      if (err) {
-        res.status(400).json({ messages: err });
-      } else {
-        Nominee.findOne({ _id: req.params.id }, function(err, nominee) {
-          if (err) {
-            res.status(400).json({ messages: err });
-          } else {
-            nominee.voters.remove(ObjectId(req.user._id));
-            nominee.save(function(err) {
-              if (err) {
-                res.status(400).json({ messages: err })
-              } else {
-                res.status(202).json({});
-              }
-            })
-          }
-        })
-      }
+    req.user.save().then(() => {
+      Nominee.findOne({ _id: req.params.id }).then(nominee => {
+        nominee.voters.remove(ObjectId(req.user._id));
+        nominee.save().then(res.status(202).json({}));
+      })
     })
+    .catch(next);
   },
 
-  getVoters: function(req, res) {
-    User.find({ votes: req.params.id }, function(err, users) {
-      if (err) {
-        res.status(500).json({ messages: 'Failed to get the voters.' });
-      } else {
-        res.status(200).json(users);
-      }
+  getVoters: (req, res, next) => {
+    User.find({ votes: req.params.id })
+      .then(users => res.status(200).json(users))
+      .catch(next);
+  },
+
+  resetVoters: (req, res, next) => {
+    Nominee.find({}).then(nominees => {
+      Promise.all(nominees.map(nominee => {
+        nominee.voters = [];
+        return nominee.save();
+      })).then(User.find({}).then(users => {
+        Promise.all(users.map(user => {
+          user.votes = [];
+          return user.save();
+        })).then(res.status(202).json({}));
+      }));
     })
+    .catch(next);
   },
 
-  resetVoters: function(req, res) {
-    Nominee.find({}, function(err, nominees) {
-      if (err) {
-        res.status(500).json(err);
-      } else {
-        async.each(nominees, function(nominee) {
-          nominee.voters = [];
-          nominee.save();
-        }, User.find({}, function(err, users) {
-          if (err) {
-            res.status(500).json(err);
-          } else {
-            async.each(users, function(user) {
-              user.votes = [];
-              user.save();
-            }, res.status(200).json({}));
-          }
-        }));
-      }
-    });
-  },
-
-  delete: function(req, res) {
-    Nominee.remove({ _id: req.params.id }, function(err) {
-      if (err) {
-        res.status(500).json({ messages: 'Failed to remove your nominee.' });
-      } else {
-        User.find({ votes: req.params.id }, function(err, users) {
-          if (err) {
-            res.status(500).json({ messages: 'Failed to remove your nominee.' });
-          } else {
-            if (users.length === 0) {
-              res.status(202).json({});
-            } else {
-              async.each(users, function(user) {
-                user.votes.remove(ObjectId(req.params.id));
-                user.save();
-              }, res.status(202).json({}));
-            }
-          }
-        });
-      }
-    });
+  delete: (req, res, next) => {
+    Nominee.remove({ _id: req.params.id }).then(() => {
+      User.find({ votes: req.params.id }).then(users => {
+        if (users.length === 0) {
+          res.status(202).json({});
+        } else {
+          Promise.all(users.map(user => {
+            user.votes.remove(ObjectId(req.params.id));
+            return user.save();
+          })).then(res.status(202).json({}));
+        }
+      })
+    })
+    .catch(next);
   }
 }
