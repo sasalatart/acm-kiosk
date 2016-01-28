@@ -9,7 +9,9 @@
         controllerAs: 'welcomeCtrl'
       })
       .when('/productElection', {
-        template: '<product-election></product-election>'
+        templateUrl: 'productElection.html',
+        controller: 'nomineeController',
+        controllerAs: 'nomineeCtrl'
       })
       .when('/users', {
         templateUrl: 'users.html',
