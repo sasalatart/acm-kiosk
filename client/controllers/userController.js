@@ -7,6 +7,7 @@
 
   function userController(sessionService, errorService, User) {
     var vm = this;
+    vm.sessionService = sessionService;
 
     sessionService.identity().then(function(identity) {
       if (!identity) {
