@@ -1,6 +1,6 @@
 var ObjectId = require('mongoose').Types.ObjectId;
-var Nominee = require('../models/nominee');
 var User = require('../models/user');
+var Nominee = require('../models/nominee');
 
 module.exports = {
   index: (req, res, next) => {
@@ -13,7 +13,7 @@ module.exports = {
     var newNominee = new Nominee();
     newNominee.name = req.body.name;
     newNominee.save()
-      .then(res.status(201).json(newNominee))
+      .then(() => res.status(201).json(newNominee))
       .catch(next);
   },
 
@@ -22,7 +22,7 @@ module.exports = {
     req.user.save().then(() => {
       Nominee.findOne({ _id: req.params.id }).then(nominee => {
         nominee.voters.push(req.user._id);
-        nominee.save().then(res.status(200).json(nominee));
+        nominee.save().then(() => res.status(200).json(nominee));
       })
     })
     .catch(next);
@@ -33,7 +33,7 @@ module.exports = {
     req.user.save().then(() => {
       Nominee.findOne({ _id: req.params.id }).then(nominee => {
         nominee.voters.remove(ObjectId(req.user._id));
-        nominee.save().then(res.status(202).json({}));
+        nominee.save().then(() => res.status(202).json({}));
       })
     })
     .catch(next);
@@ -50,11 +50,11 @@ module.exports = {
       Promise.all(nominees.map(nominee => {
         nominee.voters = [];
         return nominee.save();
-      })).then(User.find({}).then(users => {
+      })).then(() => User.find({}).then(users => {
         Promise.all(users.map(user => {
           user.votes = [];
           return user.save();
-        })).then(res.status(202).json({}));
+        })).then(() => res.status(202).json({}));
       }));
     })
     .catch(next);
@@ -63,15 +63,11 @@ module.exports = {
   delete: (req, res, next) => {
     Nominee.remove({ _id: req.params.id }).then(() => {
       User.find({ votes: req.params.id }).then(users => {
-        if (users.length === 0) {
-          res.status(202).json({});
-        } else {
-          Promise.all(users.map(user => {
-            user.votes.remove(ObjectId(req.params.id));
-            return user.save();
-          })).then(res.status(202).json({}));
-        }
-      })
+        Promise.all(users.map(user => {
+          user.votes.remove(ObjectId(req.params.id));
+          return user.save();
+        })).then(() => res.status(202).json({}));
+      });
     })
     .catch(next);
   }

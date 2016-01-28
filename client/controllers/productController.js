@@ -3,15 +3,15 @@
 
   angular.module('acmKiosk').controller('productController', productController);
 
-  productController.$inject = ['sessionService', 'Product', 'Cart', '$http'];
+  productController.$inject = ['sessionService', 'errorService', 'Product', 'Cart', '$http'];
 
-  function productController(sessionService, Product, Cart, $http) {
+  function productController(sessionService, errorService, Product, Cart, $http) {
     var vm = this;
 
     sessionService.identity().then(function(identity) {
       if (!identity) {
         sessionService.redirectToRoot();
-        alert('You have not logged in!');
+        swal('Oops...', '¡Debes iniciar sesión para hacer esto!', 'error');
       } else {
         vm.identity = identity;
 
@@ -32,26 +32,37 @@
           product.$save().then(function(newProduct) {
             vm.products.push(newProduct);
           }, function(error) {
-            alert(error.data.messages);
+            errorService.handler(error.data);
           });
           vm.productForm = {};
         };
 
         vm.updateProduct = function(product) {
-          var tempProduct = product;
-          tempProduct.name = product.editName || product.name;
-          tempProduct.costPerPack = product.editCostPerPack || product.costPerPack;
-          tempProduct.unitsPerPack = product.editUnitsPerPack || product.unitsPerPack;
-          tempProduct.price = product.editPrice || product.price;
-          tempProduct.$update({
-            id: product._id
+          product.$update({
+            id: product._id,
+            name: product.editName || product.name,
+            costPerPack: product.editCostPerPack || product.costPerPack,
+            unitsPerPack: product.editUnitsPerPack || product.unitsPerPack,
+            price: product.editPrice || product.price
           }, function(updatedProduct) {
             product.name = updatedProduct.name;
             product.costPerPack = updatedProduct.costPerPack;
             product.unitsPerPack = updatedProduct.unitsPerPack;
             product.price = updatedProduct.price;
           }, function(error) {
-            alert(error.data.messages);
+            errorService.handler(error.data);
+          });
+          product.editing = false;
+        };
+
+        vm.removeFromDisplay = function(product) {
+          product.$update({
+            id: product._id,
+            packsDisplayed: product.packsDisplayed - 1,
+          }, function(updatedProduct) {
+            product.packsDisplayed = updatedProduct.packsDisplayed;
+          }, function(error) {
+            errorService.handler(error.data);
           });
           product.editing = false;
         };
@@ -61,11 +72,9 @@
             id: product._id
           }, function() {
             var index = vm.products.indexOf(product);
-            if (index !== -1) {
-              vm.products.splice(index, 1);
-            }
+            if (index !== -1) vm.products.splice(index, 1);
           }, function(error) {
-            alert(error.data.messages);
+            errorService.handler(error.data);
           });
         };
 
@@ -78,22 +87,17 @@
             });
           });
 
-          $http({
-              method: 'POST',
-              url: '/products/buy',
-              data: {
-                cartOrder: cartOrder
-              }
+          $http.post('/products/buy', {
+              cartOrder: cartOrder
             })
-            .success(function(cart) {
-              vm.carts.push(cart);
-              Product.query(function(products) {
-                vm.products = products;
-              });
-            })
-            .error(function(error) {
-              console.log(error);
+            .then(function success(response) {
+              vm.carts.push(response.data.newCart);
+              vm.products = response.data.products;
+            }, function error(response) {
+              errorService.handler(response.data);
             });
+
+          vm.action = "";
         };
 
         vm.moveProducts = function() {
@@ -106,32 +110,16 @@
             });
           });
 
-          $http({
-              method: 'POST',
-              url: '/products/move',
-              data: {
-                productsToMove: productsToMove
-              }
+          $http.post('/products/move', {
+              productsToMove: productsToMove
             })
-            .success(function(products) {
-              vm.products = products;
-            })
-            .error(function(error) {
-              console.log(error);
+            .then(function success(response) {
+              vm.products = response.data;
+            }, function error(response) {
+              errorService.handler(response.data);
             });
-        };
 
-        vm.removeFromDisplay = function(product) {
-          $http({
-              method: 'PUT',
-              url: '/products/' + product._id + '/removeFromDisplay',
-            })
-            .success(function(updatedProduct) {
-              product.packsDisplayed = updatedProduct.packsDisplayed;
-            })
-            .error(function(error) {
-              console.log(error);
-            });
+          vm.action = "";
         };
 
         vm.costPerUnit = function(product) {
@@ -170,6 +158,6 @@
           });
         };
       }
-    })
+    });
   }
 })();

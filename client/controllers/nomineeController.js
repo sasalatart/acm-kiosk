@@ -3,16 +3,16 @@
 
   angular.module('acmKiosk').controller('nomineeController', nomineeController);
 
-  nomineeController.$inject = ['sessionService', 'Nominee', '$http'];
+  nomineeController.$inject = ['sessionService', 'errorService', 'Nominee', '$http'];
 
-  function nomineeController(sessionService, Nominee, $http) {
+  function nomineeController(sessionService, errorService, Nominee, $http) {
     var vm = this;
     vm.identity = null;
 
     sessionService.identity().then(function(identity) {
       if (!identity) {
         sessionService.redirectToRoot();
-        alert('You have not logged in!');
+        swal('Oops...', '¡Debes iniciar sesión para hacer esto!', 'error');
       } else {
         vm.identity = identity;
 
@@ -25,79 +25,66 @@
           nominee.name = vm.nomineeForm.name;
           nominee.$save().then(function(newNominee) {
             vm.nominees.push(newNominee);
-            vm.nomineeForm = {};
           }, function(error) {
-            alert(error.data.messages);
-            vm.nomineeForm = {};
-          })
+            errorService.handler(error.data);
+          });
+          vm.nomineeForm = {};
         };
 
         vm.destroyNominee = function(nominee) {
-          Nominee.delete({ id: nominee._id }, function() {
+          Nominee.delete({
+            id: nominee._id
+          }, function() {
             vm.nominees.splice(vm.nominees.indexOf(nominee), 1);
             vm.removeMyNominee(nominee);
           }, function(error) {
-            alert(error.data.messages);
+            errorService.handler(error.data);
           });
         };
 
         vm.vote = function(nominee) {
-          $http({
-              method: 'PUT',
-              url: '/nominees/' + nominee._id + '/vote'
-            })
-            .success(function(votedNominee) {
-              nominee.voters = votedNominee.voters;
-              vm.identity.votes.push(votedNominee._id);
-            })
-            .error(function(error) {
-              console.log(error);
+          $http.put('/nominees/' + nominee._id + '/vote')
+            .then(function success(response) {
+              nominee.voters = response.data.voters;
+              vm.identity.votes.push(response.data._id);
+            }, function error(response) {
+              errorService.handler(response.data);
             });
         };
 
         vm.removeVote = function(nominee) {
-          $http({
-              method: 'PUT',
-              url: '/nominees/' + nominee._id + '/removeVote'
-            })
-            .success(function() {
+          $http.put('/nominees/' + nominee._id + '/removeVote')
+            .then(function success() {
               nominee.voters.splice(nominee.voters.indexOf(vm.identity._id), 1);
               vm.removeMyNominee(nominee);
-            })
-            .error(function(error) {
-              console.log(error);
+            }, function error(response) {
+              errorService.handler(response.data);
             });
         };
 
         vm.getVoters = function(nominee) {
-          vm.selectedNominee = { name: nominee.name }
-          $http({
-              method: 'GET',
-              url: '/nominees/' + nominee._id + '/getVoters'
-            })
-            .success(function(users) {
-              vm.selectedNominee.voters = users;
+          vm.selectedNominee = {
+            name: nominee.name
+          }
+          $http.get('/nominees/' + nominee._id + '/getVoters')
+            .then(function success(response) {
+              vm.selectedNominee.voters = response.data;
               $('.ui.long.modal').modal('show');
-            })
-            .error(function(error) {
-              console.log(error);
+            }, function error(response) {
+              errorService.handler(response.data);
             });
         };
 
         vm.resetVoters = function() {
-          $http({
-            mthod: 'GET',
-            url: 'nominees/resetVoters'
-          })
-          .success(function() {
-            vm.nominees.forEach(function(nominee) {
-              nominee.voters = [];
+          $http.get('nominees/resetVoters')
+            .then(function success() {
+              vm.nominees.forEach(function(nominee) {
+                nominee.voters = [];
+              });
+              vm.identity.votes = [];
+            }, function error(response) {
+              errorService.handler(response.data);
             });
-            vm.identity.votes = [];
-          })
-          .error(function(error) {
-            console.log(error);
-          });
         };
 
         vm.totalVotes = function() {

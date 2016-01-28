@@ -3,45 +3,30 @@
 
   angular.module('acmKiosk').controller('userController', userController);
 
-  userController.$inject = ['sessionService', '$http'];
+  userController.$inject = ['sessionService', 'errorService', 'User'];
 
-  function userController(sessionService, $http) {
+  function userController(sessionService, errorService, User) {
     var vm = this;
-    vm.sessionService = sessionService;
 
     sessionService.identity().then(function(identity) {
       if (!identity) {
         sessionService.redirectToRoot();
-        alert('You have not logged in!');
+        swal('Oops...', '¡Debes iniciar sesión para hacer esto!', 'error');
       } else {
-        index();
+        User.query(function(users) {
+          vm.users = users;
+        });
 
         vm.toggleAdmin = function(user) {
-          $http({
-            method: 'PUT',
-            url: '/users/' + user._id + '/toggleAdmin',
-          })
-          .success(function(updatedUser) {
+          user.$toggleAdmin({
+            id: user._id
+          }, function(updatedUser) {
             user.admin = updatedUser.admin;
-          })
-          .error(function(error) {
-            console.log(error);
+          }, function(error) {
+            errorService.handler(error.data);
           });
         };
-
-        function index() {
-          $http({
-            method: 'GET',
-            url: '/users'
-          })
-          .success(function(users) {
-            vm.users = users;
-          })
-          .error(function(error) {
-            console.log(error);
-          });
-        }
       }
-    })
+    });
   }
 })();

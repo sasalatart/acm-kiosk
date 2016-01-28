@@ -118,7 +118,7 @@
 </table>
 
 <div class="horizontal-center">
-  <select ng-if="productCtrl.carts" ng-model="productCtrl.selectedCartID">
+  <select ng-if="productCtrl.carts.length !== 0" ng-model="productCtrl.selectedCartID">
     <option value="" disabled selected>Seleccionar Fecha de Compra</option>
     <option ng-repeat="cart in productCtrl.carts" value="{{cart._id}}">{{cart.date}}</option>
   </select>

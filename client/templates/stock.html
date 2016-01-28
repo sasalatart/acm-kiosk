@@ -14,7 +14,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="center aligned" ng-repeat="product in productCtrl.products">
+      <tr class="center aligned" ng-repeat="product in stockCtrl.products">
         <td>{{ product.name }}</td>
         <td ng-class="{ 'negative disabled': product.packsDisplayed === 0 }">{{ product.packsDisplayed }}</td>
         <td ng-class="{ 'negative disabled': product.packsStored === 0 }">{{ product.packsStored }}</td>

@@ -9,7 +9,7 @@
     var vm = this;
 
     sessionService.identity().then(function(identity) {
-      vm.identity= identity;
+      vm.identity = identity;
     });
   }
 })();

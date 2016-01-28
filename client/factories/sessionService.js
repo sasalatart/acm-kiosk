@@ -8,14 +8,10 @@
     var _identity = undefined;
 
     var logout = function() {
-      $http.get('/logout')
-        .success(function() {
-          $window.location.href = '/#/';
-          _identity = undefined;
-        })
-        .error(function(error, data) {
-          alert('error');
-        });
+      $http.get('/logout').then(function() {
+        $window.location.href = '/#/';
+        _identity = undefined;
+      });
     };
 
     var identity = function(setIdentity) {
@@ -26,17 +22,11 @@
 
       var deferred = $q.defer();
 
-      if (angular.isDefined(_identity)) {
-        deferred.resolve(_identity);
-        return deferred.promise;
-      }
-
       $http.get('/getUser')
-        .success(function(result) {
-          _identity = result;
+        .then(function success(response) {
+          _identity = response.data;
           deferred.resolve(_identity);
-        })
-        .error(function() {
+        }, function error() {
           _identity = undefined;
           deferred.reject();
         });

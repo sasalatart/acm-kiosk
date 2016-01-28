@@ -18,8 +18,8 @@
       })
       .when('/stock', {
         templateUrl: 'stock.html',
-        controller: 'productController',
-        controllerAs: 'productCtrl'
+        controller: 'stockController',
+        controllerAs: 'stockCtrl'
       })
       .when('/accounting', {
         templateUrl: 'accounting.html',

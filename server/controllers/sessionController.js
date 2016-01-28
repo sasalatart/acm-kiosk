@@ -22,7 +22,7 @@ module.exports = function(passport) {
       });
     },
 
-    isAuthenticated: function(req, res, next) {
+    isAuth: function(req, res, next) {
       if (req.user) {
         return next();
       } else {

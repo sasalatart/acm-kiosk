@@ -39,11 +39,11 @@ var userSchema = mongoose.Schema(schema);
 
 userSchema.path('votes').validate(function(votes) {
   return votes.length <= 3;
-});
+}, 'Sólo puedes votar tres veces.');
 
 userSchema.path('votes').validate(function(votes) {
   return _.uniq(_.map(votes, String)).length === votes.length;
-});
+}, 'No puedes votar más de una vez por el mismo producto.');
 
 userSchema.methods.toggleAdmin = function() {
   this.admin = !this.admin;
