@@ -9,9 +9,9 @@
     var vm = this;
 
     sessionService.identity().then(function(identity) {
-      if (!identity) {
+      if (!identity || !identity.admin) {
         sessionService.redirectToRoot();
-        swal('Oops...', '¡Debes iniciar sesión para hacer esto!', 'error');
+        swal('Oops...', 'No tienes permisos para ingresar aquí.', 'error');
       } else {
         vm.identity = identity;
 
