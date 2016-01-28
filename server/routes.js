@@ -33,7 +33,10 @@ module.exports = function(app, passport) {
   app.put('/products/:id', sessionController.isAdmin, productController.update);
   app.post('/products/buy', sessionController.isAdmin, productController.buy);
   app.post('/products/move', sessionController.isAdmin, productController.move);
+  app.put('/products/:id/removeFromDisplay', sessionController.isAdmin, productController.removeFromDisplay);
   app.delete('/products/:id', sessionController.isAdmin, productController.delete);
+
+  app.get('/carts', sessionController.isAdmin, productController.getCarts);
 
   app.use((err, req, res, next) => {
     if (process.env.NODE_ENV && process.env.NODE_ENV.toUpperCase() === 'PRODUCTION') {

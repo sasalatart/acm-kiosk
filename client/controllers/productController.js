@@ -3,13 +3,10 @@
 
   angular.module('acmKiosk').controller('productController', productController);
 
-  productController.$inject = ['sessionService', 'Product', '$http'];
+  productController.$inject = ['sessionService', 'Product', 'Cart', '$http'];
 
-  function productController(sessionService, Product, $http) {
+  function productController(sessionService, Product, Cart, $http) {
     var vm = this;
-    vm.products = [];
-    vm.productForm = {};
-    vm.carts = [];
 
     sessionService.identity().then(function(identity) {
       if (!identity) {
@@ -20,6 +17,10 @@
 
         Product.query(function(products) {
           vm.products = products;
+        });
+
+        Cart.query(function(carts) {
+          vm.carts = carts;
         });
 
         vm.newProduct = function() {
@@ -106,26 +107,67 @@
           });
 
           $http({
-            method: 'POST',
-            url: '/products/move',
-            data: {
-              productsToMove: productsToMove
-            }
-          })
-          .success(function(products) {
-            vm.products = products;
-          })
-          .error(function(error) {
-            console.log(error);
-          });
+              method: 'POST',
+              url: '/products/move',
+              data: {
+                productsToMove: productsToMove
+              }
+            })
+            .success(function(products) {
+              vm.products = products;
+            })
+            .error(function(error) {
+              console.log(error);
+            });
+        };
+
+        vm.removeFromDisplay = function(product) {
+          $http({
+              method: 'PUT',
+              url: '/products/' + product._id + '/removeFromDisplay',
+            })
+            .success(function(updatedProduct) {
+              product.packsDisplayed = updatedProduct.packsDisplayed;
+            })
+            .error(function(error) {
+              console.log(error);
+            });
         };
 
         vm.costPerUnit = function(product) {
           return product.costPerPack / product.unitsPerPack;
         };
 
-        vm.profitForBox = function(product) {
-          return (product.price * product.unitsPerPack) - product.costPerPack;
+        vm.costForProduct = function(product, cart) {
+          if (cart) {
+            return product.boughtLastTime * product.costPerPack;
+          } else {
+            return (product.packsStored + product.packsDisplayed) * product.costPerPack;
+          }
+        };
+
+        vm.profitForProduct = function(product, cart) {
+          if (cart) {
+            return product.boughtLastTime * product.unitsPerPack * product.price;
+          } else {
+            return (product.packsStored + product.packsDisplayed) * ((product.price * product.unitsPerPack) - product.costPerPack);
+          }
+        };
+
+        vm.totalCost = function(products, cart) {
+          return products.map(function(product) {
+            return vm.costForProduct(product, cart);
+          }).reduce(function(sum, current) {
+            return sum + current;
+          });
+        };
+
+        vm.totalProfit = function(products, cart) {
+          return products.map(function(product) {
+            return vm.profitForProduct(product, cart);
+          }).reduce(function(sum, current) {
+            return sum + current;
+          });
         };
       }
     })

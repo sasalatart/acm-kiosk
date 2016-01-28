@@ -4,7 +4,7 @@ var Cart = require('../models/cart');
 module.exports = {
   index: (req, res, next) => {
     Product.find({})
-      .then(products => { res.status(200).json(products); })
+      .then(products => res.status(200).json(products))
       .catch(next);
   },
 
@@ -75,5 +75,19 @@ module.exports = {
       })).then(res.status(200).json(products))
     })
     .catch(next);
+  },
+
+  removeFromDisplay: (req, res, next) => {
+    Product.findOne({ _id: req.params.id }).then(product => {
+      product.packsDisplayed -= 1;
+      product.save().then(res.status(200).json(product));
+    })
+    .catch(next);
+  },
+
+  getCarts: (req, res, next) => {
+    Cart.find({})
+      .then(carts => res.status(200).json(carts))
+      .catch(next);
   }
 }

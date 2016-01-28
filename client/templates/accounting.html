@@ -25,7 +25,7 @@
   </form>
 </div>
 
-<table class="ui structured compact table">
+<table class="ui structured compact celled table">
   <thead>
     <tr class="center aligned">
       <th rowspan="2">Nombre</th>
@@ -34,7 +34,7 @@
       <th rowspan="2">Costo/Caja</th>
       <th rowspan="2">Costo/Unidad</th>
       <th rowspan="2">Precio</th>
-      <th rowspan="2">Balance</th>
+      <th rowspan="2">Balance Esperado</th>
       <th colspan="2">Acciones</th>
     </tr>
     <tr class="center aligned">
@@ -42,6 +42,7 @@
       <th>en Bodega</th>
       <th>
         <select ng-model="productCtrl.action">
+          <option value="" disabled selected>Seleccionar Acción</option>
           <option value="add">Agregar Producto</option>
           <option value="buy">Registrar Compra</option>
           <option value="move">Mover a Kiosko</option>
@@ -59,7 +60,8 @@
         <input ng-model="product.editName" ng-if="product.editing" type="text" placeholder="{{ product.name }}">
       </td>
       <td>
-        {{ product.packsDisplayed }}
+        <span>{{ product.packsDisplayed }}</span>
+        <i class="ui red arrow circle down icon" ng-click="productCtrl.removeFromDisplay(product)" ng-if="product.packsDisplayed !== 0"></i>
       </td>
       <td>
         {{ product.packsStored }}
@@ -68,19 +70,19 @@
         <span ng-if="!product.editing">{{ product.unitsPerPack }}</span>
         <input ng-model="product.editUnitsPerPack" ng-if="product.editing" type="number" placeholder="{{ product.unitsPerPack }}">
       </td>
-      <td>
-        <span ng-if="!product.editing">{{ product.costPerPack }}</span>
+      <td class="right aligned">
+        <span ng-if="!product.editing">{{ product.costPerPack | currency:"$":0}}</span>
         <input ng-model="product.editCostPerPack" ng-if="product.editing" type="number" placeholder="{{ product.costPerPack }}">
       </td>
-      <td>
-        {{ productCtrl.costPerUnit(product) }}
+      <td class="right aligned">
+        {{ productCtrl.costPerUnit(product) | currency:"$":0}}
       </td>
-      <td>
-        <span ng-if="!product.editing">{{ product.price }}</span>
+      <td class="right aligned">
+        <span ng-if="!product.editing">{{ product.price | currency:"$":0}}</span>
         <input ng-model="product.editPrice" ng-if="product.editing" type="number" placeholder="{{ product.price }}">
       </td>
-      <td>
-        {{ productCtrl.profitForBox(product) }}
+      <td class="right aligned">
+        {{ productCtrl.profitForProduct(product) | currency:"$":0}}
       </td>
       <td>
         <span ng-if="productCtrl.action !== 'buy' && productCtrl.action !== 'move'">
@@ -102,4 +104,54 @@
       </td>
     </tr>
   </tbody>
+  <tfoot ng-if="productCtrl.products.length">
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th class="right aligned">Total: {{ productCtrl.totalCost(productCtrl.products) | currency:"$":0}}</th>
+      <th></th>
+      <th></th>
+      <th class="right aligned">Total: {{ productCtrl.totalProfit(productCtrl.products) | currency:"$":0}}</th>
+      <th></th>
+    </tr>
+  </tfoot>
+</table>
+
+<div class="horizontal-center">
+  <select ng-if="productCtrl.carts" ng-model="productCtrl.selectedCartID">
+    <option value="" disabled selected>Seleccionar Fecha de Compra</option>
+    <option ng-repeat="cart in productCtrl.carts" value="{{cart._id}}">{{cart.date}}</option>
+  </select>
+</div>
+
+<table class="ui structured compact celled table" ng-repeat="cart in productCtrl.carts" ng-if="cart._id === productCtrl.selectedCartID">
+  <thead>
+    <tr class="center aligned">
+      <th>Nombre</th>
+      <th>Cajas</th>
+      <th>Costo/Caja</th>
+      <th>Precio/Unidad</th>
+      <th>Balance Esperado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="center aligned" ng-repeat="product in cart.products">
+      <td>{{ product.name }}</td>
+      <td>{{ product.boughtLastTime }}</td>
+      <td class="right aligned">{{ product.costPerPack | currency:"$":0}}</td>
+      <td class="right aligned">{{ product.price | currency:"$":0}}</td>
+      <td class="right aligned">{{ productCtrl.profitForProduct(product) | currency:"$":0}}</td>
+    </tr>
+  </tbody>
+  <tfoot ng-if="cart.products.length">
+    <tr>
+      <th></th>
+      <th></th>
+      <th class="right aligned">Total: {{ productCtrl.totalCost(cart.products, true) | currency:"$":0}}</th>
+      <th></th>
+      <th class="right aligned">Total: {{ productCtrl.totalProfit(cart.products, true) | currency:"$":0}}</th>
+    </tr>
+  </tfoot>
 </table>

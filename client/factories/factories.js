@@ -2,4 +2,5 @@
   require('./sessionService');
   require('./nomineeResource');
   require('./productResource');
+  require('./cartResource');
 })();
