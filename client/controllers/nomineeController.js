@@ -8,9 +8,6 @@
   function nomineeController(sessionService, Nominee, $http) {
     var vm = this;
     vm.identity = null;
-    vm.nomineeForm = {};
-    vm.nominees = [];
-    vm.selectedNominee = {};
 
     sessionService.identity().then(function(identity) {
       if (!identity) {
@@ -73,7 +70,7 @@
         };
 
         vm.getVoters = function(nominee) {
-          vm.selectedNominee.name = nominee.name;
+          vm.selectedNominee = { name: nominee.name }
           $http({
               method: 'GET',
               url: '/nominees/' + nominee._id + '/getVoters'
