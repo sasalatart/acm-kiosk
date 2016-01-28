@@ -16,6 +16,11 @@
         controller: 'userController',
         controllerAs: 'userCtrl'
       })
+      .when('/stock', {
+        templateUrl: 'stock.html',
+        controller: 'productController',
+        controllerAs: 'productCtrl'
+      })
       .when('/accounting', {
         templateUrl: 'accounting.html',
         controller: 'productController',

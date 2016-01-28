@@ -1,6 +1,4 @@
-<h1 class="horizontal-center">
-  Vota por tus productos favoritos
-</h1>
+<h1>Vota por tus productos favoritos</h1>
 <h3 class="horizontal-center">
   Tienes {{3 - nomineeCtrl.identity.votes.length}} votos disponibles
 </h3>
@@ -47,9 +45,7 @@
 
 <div class="ui long modal">
   <i class="close icon"></i>
-  <h1 class="horizontal-center">
-    Votantes de {{nomineeCtrl.selectedNominee.name}}
-  </h1>
+  <h1>Votantes de {{nomineeCtrl.selectedNominee.name}}</h1>
   <div class="users">
     <div ng-repeat="voter in nomineeCtrl.selectedNominee.voters">
       <img class="ui avatar image" ng-src="{{voter.facebook.photo}}">
