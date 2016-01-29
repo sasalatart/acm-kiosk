@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET || 'napoleon'));
 app.use(session({
   cookie: {
-    maxAge: 300000
+    maxAge: 3000000
   },
   secret: process.env.SESSION_SECRET || 'napoleon',
   saveUninitialized: true,
