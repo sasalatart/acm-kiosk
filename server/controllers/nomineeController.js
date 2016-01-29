@@ -5,6 +5,10 @@ var Nominee = require('../models/nominee');
 module.exports = {
   index: (req, res, next) => {
     Nominee.find({})
+      .populate({
+        path: 'voters',
+        select: '_id facebook.name facebook.photo'
+      })
       .then(nominees => res.status(200).json(nominees))
       .catch(next);
   },
@@ -22,7 +26,7 @@ module.exports = {
     req.user.save().then(() => {
       Nominee.findOne({ _id: req.params.id }).then(nominee => {
         nominee.voters.push(req.user._id);
-        nominee.save().then(() => res.status(200).json(nominee));
+        nominee.save().then(() => res.status(200).json({}));
       })
     })
     .catch(next);
@@ -37,12 +41,6 @@ module.exports = {
       })
     })
     .catch(next);
-  },
-
-  getVoters: (req, res, next) => {
-    User.find({ votes: req.params.id })
-      .then(users => res.status(200).json(users))
-      .catch(next);
   },
 
   resetVoters: (req, res, next) => {

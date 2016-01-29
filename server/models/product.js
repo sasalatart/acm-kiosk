@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var schema = {
+var productSchema = mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -38,9 +38,7 @@ var schema = {
     default: 0,
     required: true
   }
-};
-
-var productSchema = mongoose.Schema(schema);
+});
 
 productSchema.methods.notAdminToJSON = function() {
   var object = this.toObject();
@@ -51,4 +49,4 @@ productSchema.methods.notAdminToJSON = function() {
 };
 
 module.exports = mongoose.model('Product', productSchema);
-module.exports.productSchema = productSchema;
+module.exports.schema = productSchema;

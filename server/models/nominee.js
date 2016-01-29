@@ -1,18 +1,15 @@
 var mongoose = require('mongoose');
-var userSchema = require('./user').userSchema;
 
-var schema = {
+var nomineeSchema = mongoose.Schema({
   name: {
     type: String,
     required: true
   },
   voters: [{
     type: mongoose.Schema.ObjectId,
-    ref: 'userSchema',
+    ref: 'User',
   }]
-};
-
-var nomineeSchema = mongoose.Schema(schema);
+});
 
 module.exports = mongoose.model('Nominee', nomineeSchema);
-module.exports.nomineeSchema = nomineeSchema;
+module.exports.schema = nomineeSchema;

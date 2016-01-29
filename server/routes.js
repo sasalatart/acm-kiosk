@@ -22,7 +22,6 @@ module.exports = function(app, passport) {
   app.post('/nominees', sessionCtrl.isAdmin, nomineeCtrl.create);
   app.put('/nominees/:id/vote', sessionCtrl.isAuth, nomineeCtrl.vote);
   app.put('/nominees/:id/removeVote', sessionCtrl.isAuth, nomineeCtrl.removeVote);
-  app.get('/nominees/:id/getVoters', sessionCtrl.isAuth, nomineeCtrl.getVoters);
   app.get('/nominees/resetVoters', sessionCtrl.isAdmin, nomineeCtrl.resetVoters);
   app.delete('/nominees/:id', sessionCtrl.isAdmin, nomineeCtrl.delete);
 

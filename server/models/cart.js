@@ -1,16 +1,14 @@
 var mongoose = require('mongoose');
-var productSchema = require('./product').productSchema;
+var productSchema = require('./product').schema;
 
-var schema = {
+var cartSchema = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now,
     required: true
   },
   products: [productSchema]
-};
-
-var cartSchema = mongoose.Schema(schema);
+});
 
 module.exports = mongoose.model('Cart', cartSchema);
-module.exports.cartSchema = cartSchema;
+module.exports.schema = cartSchema;

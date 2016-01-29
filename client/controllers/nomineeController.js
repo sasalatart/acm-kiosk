@@ -16,9 +16,7 @@
       } else {
         vm.identity = identity;
 
-        Nominee.query(function(nominees) {
-          vm.nominees = nominees;
-        });
+        index();
 
         vm.newNominee = function() {
           var nominee = new Nominee();
@@ -45,8 +43,8 @@
         vm.vote = function(nominee) {
           $http.put('/nominees/' + nominee._id + '/vote')
             .then(function success(response) {
-              nominee.voters = response.data.voters;
-              vm.identity.votes.push(response.data._id);
+              index();
+              vm.identity.votes.push(nominee._id);
             }, function error(response) {
               errorService.handler(response.data);
             });
@@ -55,24 +53,16 @@
         vm.removeVote = function(nominee) {
           $http.put('/nominees/' + nominee._id + '/removeVote')
             .then(function success() {
-              nominee.voters.splice(nominee.voters.indexOf(vm.identity._id), 1);
+              index();
               vm.removeMyNominee(nominee);
             }, function error(response) {
               errorService.handler(response.data);
             });
         };
 
-        vm.getVoters = function(nominee) {
-          vm.selectedNominee = {
-            name: nominee.name
-          }
-          $http.get('/nominees/' + nominee._id + '/getVoters')
-            .then(function success(response) {
-              vm.selectedNominee.voters = response.data;
-              $('.ui.long.modal').modal('show');
-            }, function error(response) {
-              errorService.handler(response.data);
-            });
+        vm.showVoters = function(nominee) {
+          vm.selectedNominee = nominee;
+          $('.ui.long.modal').modal('show');
         };
 
         vm.resetVoters = function() {
@@ -105,11 +95,20 @@
         };
 
         vm.containsMyVote = function(nominee) {
-          return nominee.voters.indexOf(vm.identity._id) !== -1;
+          var ids = nominee.voters.map(function(voter) {
+            return voter._id;
+          });
+          return ids.indexOf(vm.identity._id) !== -1;
         };
 
         vm.canVote = function() {
           return vm.identity.votes.length < 3;
+        };
+
+        function index() {
+          Nominee.query(function(nominees) {
+            vm.nominees = nominees;
+          });
         };
       }
     });
