@@ -1,5 +1,14 @@
-<div class="horizontal-center vertical-center">
-  <a class="ui huge facebook button" href="/auth/facebook">
+<div class="horizontal-center vertical-center flex-column">
+  <img alt="logo-acm" class="ui medium image" src="logo.gif"/>
+  <h1>
+    <span ng-if="appCtrl.currentUser()">
+      ¡Bienvenido {{ appCtrl.currentUser().facebook.name }}!
+    </span>
+    <span class="title" ng-if="!appCtrl.currentUser()">
+      Kiosko ACM-PUC
+    </span>
+  </h1>
+  <a class="ui huge facebook button" href="/auth/facebook" ng-if="!appCtrl.currentUser()">
     <i class="facebook icon"></i>
     <span>Iniciar Sesión</span>
   </a>

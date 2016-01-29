@@ -2,11 +2,11 @@
   angular.module('acmKiosk').config(router);
 
   function router($routeProvider) {
-    $routeProvider.
-      when('/', {
+    $routeProvider
+      .when('/', {
         templateUrl: 'welcome.html',
-        controller: 'welcomeController',
-        controllerAs: 'welcomeCtrl'
+        controller: 'appController',
+        controllerAs: 'appCtrl'
       })
       .when('/productElection', {
         templateUrl: 'productElection.html',

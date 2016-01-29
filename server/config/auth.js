@@ -4,4 +4,4 @@ module.exports = {
     'clientSecret': process.env.FACEBOOK_CLIENT_SECRET,
     'callbackURL': 'http://localhost:8888/auth/facebook/callback'
   }
-}
+};

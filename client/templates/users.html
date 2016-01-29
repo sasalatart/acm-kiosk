@@ -1,4 +1,8 @@
-<h1>Usuarios</h1>
+<h1 class="ui huge header center aligned">
+  <div class="content">
+    Usuarios
+  </div>
+</h1>
 
 <div class="horizontal-center">
   <div class="ui search">
@@ -11,8 +15,8 @@
 
 <div class="users">
   <div ng-repeat="user in userCtrl.users | orderBy : 'facebook.name' | filter : searchText">
-    <img class="ui avatar image" ng-src="{{user.facebook.photo}}">
-    <span>{{user.facebook.name}}</span>
+    <img class="ui avatar image" ng-src="{{ user.facebook.photo }}">
+    <span>{{ user.facebook.name }}</span>
     <span ng-click="userCtrl.toggleAdmin(user)" ng-if="userCtrl.sessionService.getIdentity().admin">
       <i class="ui red arrow circle down icon" ng-if="user.admin"></i>
       <i class="ui green arrow circle up icon" ng-if="!user.admin"></i>

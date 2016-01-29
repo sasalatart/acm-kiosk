@@ -1,3 +1,17 @@
+html,
+body {
+  background: #a6a2a2;
+  background: -webkit-linear-gradient(#a6a2a2, #fbfbf2);
+  background: -o-linear-gradient(#a6a2a2, #fbfbf2);
+  background: -moz-linear-gradient(#a6a2a2, #fbfbf2);
+  background: linear-gradient(#a6a2a2, #fbfbf2);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  height: 100%;
+  margin: 0;
+  padding: 2em 0;
+}
+
 .horizontal-center {
   display: flex;
   justify-content: center;
@@ -9,10 +23,18 @@
 }
 
 .vertical-center {
-  min-height: 100%;
-  min-height: 100vh;
-  display: flex;
   align-items: center;
+  display: flex;
+  min-height: 100%;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 2em;
 }
 
 .nominee {
@@ -68,9 +90,10 @@ i.ui.arrow.circle.icon {
 }
 
 .users {
-  -webkit-columns: 3 25em;
-  -moz-columns: 3 25em;
-  columns: 3 25em;
+  -webkit-columns: 3 15em;
+  -moz-columns: 3 15em;
+  columns: 3 15em;
+  margin-top: 1em;
 }
 
 td input[type="text"] {
@@ -79,8 +102,4 @@ td input[type="text"] {
 
 td input[type="number"] {
   width: 4em;
-}
-
-h1 {
-  text-align: center;
 }

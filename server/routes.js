@@ -43,4 +43,4 @@ module.exports = function(app, passport) {
   app.use((err, req, res, next) => {
     res.status(err.statusCode || 500).json(err);
   });
-}
+};

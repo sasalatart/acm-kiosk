@@ -7,7 +7,7 @@ module.exports = {
       .catch(next);
   },
 
-  toggleAdmin: (req, res, next ) => {
+  toggleAdmin: (req, res, next) => {
     User.findOne({ _id: req.params.id }).then(user => {
       user.toggleAdmin();
       res.status(200).json(user);

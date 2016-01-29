@@ -9,7 +9,7 @@ module.exports = function(passport) {
             } else {
               res.redirect('/');
             }
-          })
+          });
         } else {
           res.status(404).send({ messages: info.message });
         }
@@ -41,5 +41,5 @@ module.exports = function(passport) {
     getUser: function(req, res) {
       res.status(200).json(req.user);
     }
-  }
-}
+  };
+};

@@ -1,8 +1,7 @@
 (function() {
-  'use strict'
+  'use strict';
 
-  require('./navBarController');
-  require('./welcomeController');
+  require('./appController');
   require('./nomineeController');
   require('./stockController');
   require('./productController');

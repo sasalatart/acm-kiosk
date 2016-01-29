@@ -1,34 +1,35 @@
-<div class="ui inverted stackable labeled icon fixed menu" ng-if="navBarCtrl.sessionService.getIdentity()">
-  <a class="item" ng-href="/#/">
-    <i class="home icon"></i>
-    <span>Kiosko ACM-PUC</span>
-  </a>
-  <a class="item" ng-href="/#/productElection">
-    <i class="shop icon"></i>
-    <span>Votar</span>
-  </a>
-  <a class="item" ng-href="/#/stock">
-    <i class="bar chart icon"></i>
-    <span>Stock</span>
-  </a>
-  <a class="item" ng-href="/#/accounting" ng-if="navBarCtrl.sessionService.getIdentity().admin">
-    <i class="money icon"></i>
-    <span>Cuentas</span>
-  </a>
-  <a class="item" ng-href="/#/users">
-    <i class="users icon"></i>
-    <span>Usuarios</span>
-  </a>
-  <a class="item" href="http://acm.ing.puc.cl">
-    <i class="world icon"></i>
-    <span>Sitio ACM-PUC</span>
-  </a>
+<div ng-if="appCtrl.currentUser()">
+  <div class="ui left vertical inverted sidebar labeled icon menu visible">
+    <a class="item" ng-href="/#/">
+      <i class="home icon"></i>
+      <div>Kiosko</div>
+      <div>ACM-PUC</div>
+    </a>
+    <a class="item" ng-href="/#/productElection">
+      <i class="shop icon"></i>
+      <div>Votar</div>
+    </a>
+    <a class="item" ng-href="/#/stock">
+      <i class="bar chart icon"></i>
+      <div>Stock</div>
+    </a>
+    <a class="item" ng-href="/#/accounting" ng-if="appCtrl.currentUser().admin">
+      <i class="money icon"></i>
+      <div>Cuentas</div>
+    </a>
+    <a class="item" ng-href="/#/users">
+      <i class="users icon"></i>
+      <div>Usuarios</div>
+    </a>
+    <a class="item" href="http://acm.ing.puc.cl">
+      <i class="world icon"></i>
+      <div>Sitio</div>
+      <div>ACM-PUC</div>
+    </a>
 
-  <div class="right menu">
     <a class="item" href="/logout">
-      <i class="sign out icon"></i>
-      <span>Cerrar sesión</span>
+      <img class="ui img" alt="user" ng-src="{{appCtrl.currentUser().facebook.photo}}"/>
+      <div>Cerrar sesión</div>
     </a>
   </div>
 </div>
-<div class="spacer" ng-if="navBarCtrl.sessionService.getIdentity()" ng-style="{'height': navBarCtrl.getHeight()}"></div>

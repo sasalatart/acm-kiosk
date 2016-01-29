@@ -1,5 +1,5 @@
 (function() {
-  'use strict'
+  'use strict';
 
   angular.module('acmKiosk').controller('productController', productController);
 
@@ -13,8 +13,6 @@
         sessionService.redirectToRoot();
         swal('Oops...', 'No tienes permisos para ingresar aquí.', 'error');
       } else {
-        vm.identity = identity;
-
         Product.query(function(products) {
           vm.products = products;
         });
@@ -58,7 +56,7 @@
         vm.removeFromDisplay = function(product) {
           product.$update({
             id: product._id,
-            packsDisplayed: product.packsDisplayed - 1,
+            packsDisplayed: product.packsDisplayed - 1
           }, function(updatedProduct) {
             product.packsDisplayed = updatedProduct.packsDisplayed;
           }, function(error) {
@@ -88,16 +86,16 @@
           });
 
           $http.post('/products/buy', {
-              cartOrder: cartOrder
-            })
-            .then(function success(response) {
-              vm.carts.push(response.data.newCart);
-              vm.products = response.data.products;
-            }, function error(response) {
-              errorService.handler(response.data);
-            });
+            cartOrder: cartOrder
+          })
+          .then(function success(response) {
+            vm.carts.push(response.data.newCart);
+            vm.products = response.data.products;
+          }, function error(response) {
+            errorService.handler(response.data);
+          });
 
-          vm.action = "";
+          vm.action = '';
         };
 
         vm.moveProducts = function() {
@@ -111,15 +109,15 @@
           });
 
           $http.post('/products/move', {
-              productsToMove: productsToMove
-            })
-            .then(function success(response) {
-              vm.products = response.data;
-            }, function error(response) {
-              errorService.handler(response.data);
-            });
+            productsToMove: productsToMove
+          })
+          .then(function success(response) {
+            vm.products = response.data;
+          }, function error(response) {
+            errorService.handler(response.data);
+          });
 
-          vm.action = "";
+          vm.action = '';
         };
 
         vm.costPerUnit = function(product) {

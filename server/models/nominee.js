@@ -7,7 +7,7 @@ var nomineeSchema = mongoose.Schema({
   },
   voters: [{
     type: mongoose.Schema.ObjectId,
-    ref: 'User',
+    ref: 'User'
   }]
 });
 

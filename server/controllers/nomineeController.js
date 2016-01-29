@@ -27,7 +27,7 @@ module.exports = {
       Nominee.findOne({ _id: req.params.id }).then(nominee => {
         nominee.voters.push(req.user._id);
         nominee.save().then(() => res.status(200).json({}));
-      })
+      });
     })
     .catch(next);
   },
@@ -38,7 +38,7 @@ module.exports = {
       Nominee.findOne({ _id: req.params.id }).then(nominee => {
         nominee.voters.remove(ObjectId(req.user._id));
         nominee.save().then(() => res.status(202).json({}));
-      })
+      });
     })
     .catch(next);
   },
@@ -69,4 +69,4 @@ module.exports = {
     })
     .catch(next);
   }
-}
+};

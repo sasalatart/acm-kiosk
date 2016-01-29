@@ -56,13 +56,13 @@ module.exports = {
         product.boughtLastTime = productOrdered.bought;
         return product.validate();
       })).then(() => {
-          Promise.all(products.map(product => {
-            return product.save().then(product => newCart.products.push(product));
-          })).then(products => {
-            newCart.save();
-          }).then(() => res.status(201).json({ products: products, newCart: newCart }))
-        })
-        .catch(next);
+        Promise.all(products.map(product => {
+          return product.save().then(product => newCart.products.push(product));
+        })).then(products => {
+          newCart.save();
+        }).then(() => res.status(201).json({ products: products, newCart: newCart }));
+      })
+      .catch(next);
     })
     .catch(next);
   },
@@ -79,7 +79,7 @@ module.exports = {
       })).then(() => {
         Promise.all(products.map(product => {
           product.save();
-        })).then(() => res.status(200).json(products))
+        })).then(() => res.status(200).json(products));
       })
       .catch(next);
     })
@@ -91,4 +91,4 @@ module.exports = {
       .then(carts => res.status(200).json(carts))
       .catch(next);
   }
-}
+};

@@ -1,5 +1,5 @@
 (function() {
-  'use strict '
+  'use strict ';
 
   angular.module('acmKiosk').factory('Product', function($resource) {
     return $resource('/products/:id', {

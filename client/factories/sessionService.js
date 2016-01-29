@@ -1,11 +1,10 @@
 (function() {
-  'use strict'
+  'use strict';
 
   angular.module('acmKiosk').service('sessionService', sessionService);
 
   function sessionService($http, $q, $window) {
-    var vm = this;
-    var _identity = undefined;
+    var _identity;
 
     var logout = function() {
       $http.get('/logout').then(function() {
@@ -47,6 +46,6 @@
       identity,
       getIdentity,
       redirectToRoot
-    }
+    };
   }
-})()
+})();
