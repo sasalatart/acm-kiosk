@@ -43,7 +43,7 @@
     <div class="ui grey button" ng-click="nomineeCtrl.destroyNominee(nominee)" ng-if="appCtrl.currentUser().admin">
       <i class="ui remove icon"></i>
     </div>
-    <div class="ui blue button" ng-click="nomineeCtrl.showVoters(nominee)">
+    <div class="ui blue button" ng-click="nomineeCtrl.showVoters(nominee)" ng-if="nominee.voters.length !== 0">
       <i class="ui search icon"></i>
     </div>
   </div>

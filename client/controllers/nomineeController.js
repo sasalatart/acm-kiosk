@@ -36,6 +36,7 @@
             vm.nominees.splice(vm.nominees.indexOf(nominee), 1);
             vm.removeMyNominee(nominee);
           }, function(error) {
+            index();
             errorService.handler(error.data);
           });
         };
@@ -43,20 +44,23 @@
         vm.vote = function(nominee) {
           $http.put('/nominees/' + nominee._id + '/vote')
             .then(function success(response) {
-              index();
               vm.identity.votes.push(nominee._id);
             }, function error(response) {
               errorService.handler(response.data);
+            })
+            .finally(function() {
+              index();
             });
         };
 
         vm.removeVote = function(nominee) {
           $http.put('/nominees/' + nominee._id + '/removeVote')
-            .then(function success() {
+            .then(function success(response) {}, function error(response) {
+              errorService.handler(response.data);
+            })
+            .finally(function() {
               index();
               vm.removeMyNominee(nominee);
-            }, function error(response) {
-              errorService.handler(response.data);
             });
         };
 

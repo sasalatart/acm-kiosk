@@ -36,5 +36,5 @@ gulp.task('watch', () => {
   gulp.watch('client/**/*.js', ['build-js']);
   gulp.watch('client/**/*.css', ['build-css']);
   gulp.watch('client/**/*.html', ['build-html']);
-  gulp.watch('client/assets/images/*', ['build-html']);
+  gulp.watch('client/assets/images/*', ['move-images']);
 });

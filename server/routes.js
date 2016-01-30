@@ -37,10 +37,10 @@ module.exports = function(app, passport) {
   app.get('/carts', sessionCtrl.isAdmin, productCtrl.getCarts);
 
   app.use((err, req, res, next) => {
-    validationErrorMessages(err, req, res);
+    validationErrorMessages(err, req, res, next);
   });
 
-  app.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json(err);
+  app.use((err, req, res) => {
+    res.status(err.statusCode || 500).json({ messages: [err] });
   });
 };

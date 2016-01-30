@@ -5,7 +5,7 @@
 
   function errorService() {
     var handler = function(errors) {
-      swal('Oops...', errors.reduce(function(message, error) {
+      swal('Oops...', errors.messages.reduce(function(message, error) {
         return message + '\n' + error;
       }), 'error');
     };

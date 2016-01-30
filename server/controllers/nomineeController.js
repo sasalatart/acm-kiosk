@@ -22,22 +22,22 @@ module.exports = {
   },
 
   vote: (req, res, next) => {
-    req.user.votes.push(req.params.id);
-    req.user.save().then(() => {
-      Nominee.findOne({ _id: req.params.id }).then(nominee => {
+    Nominee.findOne({ _id: req.params.id }).then(nominee => {
+      req.user.votes.push(nominee._id);
+      return req.user.save().then(() => {
         nominee.voters.push(req.user._id);
-        nominee.save().then(() => res.status(200).json({}));
+        return nominee.save().then(() => res.status(200).json({ user: req.user, nominee: nominee }));
       });
     })
     .catch(next);
   },
 
   removeVote: (req, res, next) => {
-    req.user.votes.remove(ObjectId(req.params.id));
-    req.user.save().then(() => {
-      Nominee.findOne({ _id: req.params.id }).then(nominee => {
+    Nominee.findOne({ _id: req.params.id }).then(nominee => {
+      req.user.votes.remove(ObjectId(req.params.id));
+      return req.user.save().then(() => {
         nominee.voters.remove(ObjectId(req.user._id));
-        nominee.save().then(() => res.status(202).json({}));
+        return nominee.save().then(() => res.status(202).json({ user: req.user, nominee: nominee }));
       });
     })
     .catch(next);
@@ -60,8 +60,8 @@ module.exports = {
 
   delete: (req, res, next) => {
     Nominee.remove({ _id: req.params.id }).then(() => {
-      User.find({ votes: req.params.id }).then(users => {
-        Promise.all(users.map(user => {
+      return User.find({ votes: req.params.id }).then(users => {
+        return Promise.all(users.map(user => {
           user.votes.remove(ObjectId(req.params.id));
           return user.save();
         })).then(() => res.status(202).json({}));

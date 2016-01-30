@@ -1,26 +1,23 @@
 module.exports = (err, req, res, next) => {
-  // If it isn't a mongoose-validation error, just throw it.
-  if (err.name !== 'ValidationError') return next(err);
+  var errors = { messages: [] };
 
-  var messages = {
-    'min': '%s below minimum.',
-    'max': '%s above maximum.',
-    'required': '%s is required.'
-  };
+  if (err.name === 'ValidationError') {
+    var messages = {
+      'min': ' is below minimum.',
+      'max': ' is above maximum.',
+      'required': ' is required.'
+    };
 
-  // A validationerror can contain more than one error.
-  var errors = [];
+    Object.keys(err.errors).forEach(function(field) {
+      var eObj = err.errors[field];
+      errors.messages.push(eObj.properties.path + messages[eObj.properties.type]);
+    });
 
-  // Loop over the errors object of the Validation Error
-  Object.keys(err.errors).forEach(function(field) {
-    var eObj = err.errors[field];
-
-    if (messages.hasOwnProperty(eObj.properties.type)) {
-      errors.push(eObj.message);
-    } else {
-      errors.push(require('util').format(messages[eObj.properties.type], eObj.properties.path));
-    }
-  });
-
-  res.status(400).json(errors);
+    res.status(400).json(errors);
+  } else if (err.name === 'TypeError') {
+    errors.messages.push('Resource not found');
+    res.status(404).json(errors);
+  } else {
+    return next(err, req, res);
+  }
 };

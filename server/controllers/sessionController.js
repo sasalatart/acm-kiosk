@@ -1,7 +1,7 @@
 module.exports = function(passport) {
   return {
-    login: function(req, res, next) {
-      passport.authenticate('facebook', function(err, user, info) {
+    login: (req, res, next) => {
+      passport.authenticate('facebook', (err, user, info) => {
         if (user) {
           req.login(user, function(err) {
             if (err) {
@@ -11,18 +11,18 @@ module.exports = function(passport) {
             }
           });
         } else {
-          res.status(404).send({ messages: info.message });
+          res.status(404).send({ messages: err });
         }
       })(req, res, next);
     },
 
-    logout: function(req, res) {
-      req.session.destroy(function(err) {
+    logout: (req, res) => {
+      req.session.destroy(() => {
         res.redirect('/');
       });
     },
 
-    isAuth: function(req, res, next) {
+    isAuth: (req, res, next) => {
       if (req.user) {
         return next();
       } else {
@@ -30,7 +30,7 @@ module.exports = function(passport) {
       }
     },
 
-    isAdmin: function(req, res, next) {
+    isAdmin: (req, res, next) => {
       if (req.user && req.user.admin) {
         return next();
       } else {
@@ -38,7 +38,7 @@ module.exports = function(passport) {
       }
     },
 
-    getUser: function(req, res) {
+    getUser: (req, res) => {
       res.status(200).json(req.user);
     }
   };

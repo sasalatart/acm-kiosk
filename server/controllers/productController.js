@@ -32,9 +32,7 @@ module.exports = {
       product.costPerPack = req.query.costPerPack || product.costPerPack;
       product.unitsPerPack = req.query.unitsPerPack || product.unitsPerPack;
       product.price = req.query.price || product.price;
-      product.save()
-        .then(product => res.status(200).json(product))
-        .catch(next);
+      return product.save().then(product => res.status(200).json(product));
     })
     .catch(next);
   },
@@ -50,19 +48,19 @@ module.exports = {
     var ids = req.body.cartOrder.map(product => product._id);
 
     Product.find({ _id: { $in: ids } }).then(products => {
-      Promise.all(products.map(product => {
+      return Promise.all(products.map(product => {
         var productOrdered = tools.findElement(req.body.cartOrder, '_id', product._id);
         product.packsStored += productOrdered.bought;
         product.boughtLastTime = productOrdered.bought;
         return product.validate();
       })).then(() => {
-        Promise.all(products.map(product => {
-          return product.save().then(product => newCart.products.push(product));
+        return Promise.all(products.map(product => {
+          return product.save();
         })).then(products => {
-          newCart.save();
+          newCart.products = products;
+          return newCart.save();
         }).then(() => res.status(201).json({ products: products, newCart: newCart }));
-      })
-      .catch(next);
+      });
     })
     .catch(next);
   },
@@ -71,17 +69,16 @@ module.exports = {
     var ids = req.body.productsToMove.map(product => product._id);
 
     Product.find({ _id: { $in: ids } }).then(products => {
-      Promise.all(products.map(product => {
+      return Promise.all(products.map(product => {
         var productToMove = tools.findElement(req.body.productsToMove, '_id', product._id);
         product.packsStored -= productToMove.quantity;
         product.packsDisplayed += productToMove.quantity;
         return product.validate();
       })).then(() => {
-        Promise.all(products.map(product => {
-          product.save();
-        })).then(() => res.status(200).json(products));
-      })
-      .catch(next);
+        return Promise.all(products.map(product => {
+          return product.save();
+        })).then(products => res.status(200).json(products));
+      });
     })
     .catch(next);
   },

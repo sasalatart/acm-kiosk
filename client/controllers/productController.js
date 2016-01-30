@@ -90,7 +90,10 @@
           })
           .then(function success(response) {
             vm.carts.push(response.data.newCart);
-            vm.products = response.data.products;
+            for (var i = 0; i < vm.products.length; i = i + 1) {
+              vm.products[i].packsStored = response.data.products[i].packsStored;
+              vm.products[i].boughtLastTime = response.data.products[i].boughtLastTime;
+            }
           }, function error(response) {
             errorService.handler(response.data);
           });
@@ -112,7 +115,10 @@
             productsToMove: productsToMove
           })
           .then(function success(response) {
-            vm.products = response.data;
+            for (var i = 0; i < vm.products.length; i = i + 1) {
+              vm.products[i].packsStored = response.data[i].packsStored;
+              vm.products[i].packsDisplayed = response.data[i].packsDisplayed;
+            }
           }, function error(response) {
             errorService.handler(response.data);
           });
