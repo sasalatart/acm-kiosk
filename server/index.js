@@ -34,8 +34,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/bower_components', express.static('bower_components'));
-app.use(express.static('client/assets'));
-app.use(express.static('client/templates'));
+app.use(express.static('client/public'));
 
 require('./routes')(app, passport);
 
