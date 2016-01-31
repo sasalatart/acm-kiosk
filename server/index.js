@@ -6,12 +6,11 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
+var secrets = require('./config/secrets');
 
 var app = express();
 
-var DB_HOST = process.env.DATABASE_HOST || 'mongo_db';
-var DB_PORT = process.env.DATABASE_PORT || '27017';
-mongoose.connect('mongodb://' + DB_HOST + ':' + DB_PORT + '/acmKiosk');
+mongoose.connect('mongodb://' + secrets.DB_HOST + ':' + secrets.DB_PORT + '/acmKiosk');
 mongoose.Promise = bluebird;
 
 require('./config/passport')(passport);
@@ -21,12 +20,12 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(bodyParser.json());
-app.use(cookieParser(process.env.COOKIE_SECRET || 'napoleon'));
+app.use(cookieParser(secrets.COOKIE_SECRET));
 app.use(session({
   cookie: {
     maxAge: 3000000
   },
-  secret: process.env.SESSION_SECRET || 'napoleon',
+  secret: secrets.SESSION_SECRET,
   saveUninitialized: true,
   resave: true
 }));

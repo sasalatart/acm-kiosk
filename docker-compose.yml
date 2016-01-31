@@ -1,0 +1,16 @@
+mongo_db:
+  image: mongo:3.2.1
+web:
+  build: .
+  command: npm start
+  ports:
+    - '80:8888'
+  links:
+    - mongo_db
+  environment:
+    - ACM_KIOSK_HOST
+    - ACM_KIOSK_PORT
+    - ACM_KIOSK_FB_CLIENT_ID
+    - ACM_KIOSK_FB_CLIENT_SECRET
+    - COOKIE_SECRET
+    - SESSION_SECRET
