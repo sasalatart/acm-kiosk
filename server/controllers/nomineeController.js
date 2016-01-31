@@ -9,7 +9,7 @@ module.exports = {
         path: 'voters',
         select: '_id facebook.name facebook.photo'
       })
-      .then(nominees => res.status(200).json(nominees))
+      .then(nominees => res.status(200).json({ nominees: nominees, myVotes: req.user.votes }))
       .catch(next);
   },
 
@@ -26,7 +26,7 @@ module.exports = {
       req.user.votes.push(nominee._id);
       return req.user.save().then(() => {
         nominee.voters.push(req.user._id);
-        return nominee.save().then(() => res.status(200).json({ user: req.user, nominee: nominee }));
+        return nominee.save().then(() => res.status(200).json({ myVotes: req.user.votes, nominee: nominee }));
       });
     })
     .catch(next);
@@ -37,7 +37,7 @@ module.exports = {
       req.user.votes.remove(ObjectId(req.params.id));
       return req.user.save().then(() => {
         nominee.voters.remove(ObjectId(req.user._id));
-        return nominee.save().then(() => res.status(202).json({ user: req.user, nominee: nominee }));
+        return nominee.save().then(() => res.status(202).json({ myVotes: req.user.votes, nominee: nominee }));
       });
     })
     .catch(next);

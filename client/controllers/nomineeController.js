@@ -15,7 +15,6 @@
         swal('Oops...', '¡Debes iniciar sesión para hacer esto!', 'error');
       } else {
         vm.identity = identity;
-
         index();
 
         vm.newNominee = function() {
@@ -34,7 +33,10 @@
             id: nominee._id
           }, function() {
             vm.nominees.splice(vm.nominees.indexOf(nominee), 1);
-            vm.removeMyNominee(nominee);
+            var index = vm.identity.votes.indexOf(nominee._id);
+            if (index !== -1) {
+              vm.identity.votes.splice(index, 1);
+            }
           }, function(error) {
             index();
             errorService.handler(error.data);
@@ -43,9 +45,7 @@
 
         vm.vote = function(nominee) {
           $http.put('/nominees/' + nominee._id + '/vote')
-            .then(function success(response) {
-              vm.identity.votes.push(nominee._id);
-            }, function error(response) {
+            .then(function success(response) {}, function error(response) {
               errorService.handler(response.data);
             })
             .finally(function() {
@@ -60,17 +60,11 @@
             })
             .finally(function() {
               index();
-              vm.removeMyNominee(nominee);
             });
         };
 
-        vm.showVoters = function(nominee) {
-          vm.selectedNominee = nominee;
-          $('.ui.long.modal').modal('show');
-        };
-
         vm.resetVoters = function() {
-          $http.get('nominees/resetVoters')
+          $http.get('/nominees/resetVoters')
             .then(function success() {
               vm.nominees.forEach(function(nominee) {
                 nominee.voters = [];
@@ -91,11 +85,9 @@
             });
         };
 
-        vm.removeMyNominee = function(nominee) {
-          var index = vm.identity.votes.indexOf(nominee._id);
-          if (index !== -1) {
-            vm.identity.votes.splice(index, 1);
-          }
+        vm.showVoters = function(nominee) {
+          vm.selectedNominee = nominee;
+          $('.ui.long.modal').modal('show');
         };
 
         vm.containsMyVote = function(nominee) {
@@ -110,10 +102,14 @@
         };
 
         function index() {
-          Nominee.query(function(nominees) {
-            vm.nominees = nominees;
-          });
-        };
+          $http.get('/nominees')
+            .then(function success(response) {
+              vm.nominees = response.data.nominees;
+              vm.identity.votes = response.data.myVotes;
+            }, function error(response) {
+              errorService.handler(response.data);
+            });
+        }
       }
     });
   }
