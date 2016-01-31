@@ -10,12 +10,10 @@
     <link href="styles/master.min.css" rel="stylesheet">
   </head>
   <body ng-controller="appController as appCtrl">
-    <nav-bar></nav-bar>
-
-    <div class="ui container">
-      <div class="wrapper">
-        <div ng-view></div>
-      </div>
+    <div class="wrapper flex-column">
+      <top-bar class="bar" ng-if="appCtrl.currentUser()"></top-bar>
+      <div class="ui container views flex-column" ng-view></div>
+      <bot-bar class="bar"></bot-bar>
     </div>
 
     <script src="bower_components/angular/angular.min.js"></script>

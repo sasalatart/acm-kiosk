@@ -1,26 +1,27 @@
-<h1 class="ui huge header center aligned">
-  <div class="content">
-    Usuarios
-  </div>
-</h1>
+<div class="users">
+  <h1 class="ui huge header center aligned">
+    <div class="content">
+      Usuarios
+    </div>
+  </h1>
 
-<div class="horizontal-center">
-  <div class="ui search">
-    <div class="ui icon input">
-      <input class="prompt" placeholder="Buscar..." type="text" ng-model="searchText">
-      <i class="search icon"></i>
+  <div class="aligner">
+    <div class="ui search">
+      <div class="ui icon input">
+        <input class="prompt" placeholder="Buscar..." type="text" ng-model="searchText">
+        <i class="search icon"></i>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="users">
-  <div ng-repeat="user in userCtrl.users | orderBy : 'facebook.name' | filter : searchText">
-    <i class="ui yellow inverted circular star icon" ng-if="user.admin"></i>
-    <img class="ui avatar image" ng-src="{{ user.facebook.photo }}">
-    <span>{{ user.facebook.name }}</span>
-    <span ng-click="userCtrl.toggleAdmin(user)" ng-if="userCtrl.sessionService.getIdentity().admin">
-      <i class="ui red inverted circular arrow down link icon" ng-if="user.admin"></i>
-      <i class="ui green inverted circular arrow up link icon" ng-if="!user.admin"></i>
-    </span>
+  <div class="user-list">
+    <div ng-repeat="user in userCtrl.users | orderBy : 'facebook.name' | filter : searchText">
+      <img class="ui avatar image" ng-src="{{ user.facebook.photo }}">
+      <span>{{ user.facebook.name }}</span>
+      <span ng-click="userCtrl.toggleAdmin(user)" ng-if="userCtrl.sessionService.getIdentity().admin">
+        <i class="ui red inverted circular arrow down link icon" ng-if="user.admin"></i>
+        <i class="ui green inverted circular arrow up link icon" ng-if="!user.admin"></i>
+      </span>
+    </div>
   </div>
 </div>

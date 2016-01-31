@@ -1,75 +1,77 @@
-<h1 class="ui huge header center aligned">
-  <div class="content">
-    Vota por tus productos favoritos
-    <div class="sub header">
-      {{ 3 - appCtrl.currentUser().votes.length }}/3 votos restantes
-    </div>
-  </div>
-</h1>
-
-<div class="horizontal-center" ng-if="appCtrl.currentUser().admin">
-  <form class="ui form" name="newNomineeForm" ng-submit="newNomineeForm.$valid && nomineeCtrl.newNominee()" novalidate>
-    <div class="inline fields">
-      <div class="field">
-        <label for="name">Nombre del Producto</label>
-        <input id="name" name="name" ng-model="nomineeCtrl.nomineeForm.name" required type="text">
-      </div>
-      <div class="field">
-        <input class="ui green button" ng-class="{ 'disabled': !newNomineeForm.$valid }" type="submit" value="Crear">
-        <button class="ui red button" type="button" ng-click="nomineeCtrl.resetVoters()">
-          Reset Votes
-        </button>
+<div class="product-election">
+  <h1 class="ui huge header center aligned">
+    <div class="content">
+      Vota por tus productos favoritos
+      <div class="sub header">
+        {{ 3 - appCtrl.currentUser().votes.length }}/3 votos restantes
       </div>
     </div>
-  </form>
-</div>
-
-<div class="horizontal-center-space-between nominee" ng-repeat="nominee in nomineeCtrl.nominees | orderBy : '-voters.length'">
-  <div class="progress-bar">
-    <progress id="{{ nominee.id }}" max="{{ nomineeCtrl.totalVotes() }}" value="{{ nominee.voters.length }}"></progress>
-    <span>
-      {{ nominee.name }}: {{ nominee.voters.length }}
-      <span ng-if="nominee.voters.length === 1">voto</span>
-      <span ng-if="nominee.voters.length !== 1">votos</span>
-    </span>
-  </div>
-  <div class="vote ui icon buttons">
-    <div class="ui red button" ng-click="nomineeCtrl.removeVote(nominee)" ng-if="nomineeCtrl.containsMyVote(nominee)">
-      <i class="ui minus icon"></i>
-    </div>
-    <div class="ui green button" ng-click="nomineeCtrl.vote(nominee)" ng-if="!nomineeCtrl.containsMyVote(nominee) && nomineeCtrl.canVote()">
-      <i class="ui plus icon"></i>
-    </div>
-    <div class="ui grey button" ng-click="nomineeCtrl.destroyNominee(nominee)" ng-if="appCtrl.currentUser().admin">
-      <i class="ui remove icon"></i>
-    </div>
-    <div class="ui blue button" ng-click="nomineeCtrl.showVoters(nominee)" ng-if="nominee.voters.length !== 0">
-      <i class="ui search icon"></i>
-    </div>
-  </div>
-</div>
-
-<div class="ui long modal">
-  <i class="close icon"></i>
-  <h1 class="horizontal-center">
-    Votantes de {{ nomineeCtrl.selectedNominee.name }}
   </h1>
-  <div class="users">
-    <div ng-repeat="voter in nomineeCtrl.selectedNominee.voters">
-      <img class="ui avatar image" ng-src="{{ voter.facebook.photo }}">
-      <span>{{ voter.facebook.name }}</span>
+
+  <div class="aligner" ng-if="appCtrl.currentUser().admin">
+    <form class="ui form" name="newNomineeForm" ng-submit="newNomineeForm.$valid && nomineeCtrl.newNominee()" novalidate>
+      <div class="inline fields">
+        <div class="field">
+          <label for="name">Nombre del Producto</label>
+          <input id="name" name="name" ng-model="nomineeCtrl.nomineeForm.name" required type="text">
+        </div>
+        <div class="field">
+          <input class="ui green button" ng-class="{ 'disabled': !newNomineeForm.$valid }" type="submit" value="Crear">
+          <button class="ui red button" type="button" ng-click="nomineeCtrl.resetVoters()">
+            Reset Votes
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="aligner-space-between nominee" ng-repeat="nominee in nomineeCtrl.nominees | orderBy : '-voters.length'">
+    <div class="progress-bar">
+      <progress id="{{ nominee.id }}" max="{{ nomineeCtrl.totalVotes() }}" value="{{ nominee.voters.length }}"></progress>
+      <span>
+        {{ nominee.name }}: {{ nominee.voters.length }}
+        <span ng-if="nominee.voters.length === 1">voto</span>
+        <span ng-if="nominee.voters.length !== 1">votos</span>
+      </span>
+    </div>
+    <div class="vote ui icon buttons">
+      <div class="ui red button" ng-click="nomineeCtrl.removeVote(nominee)" ng-if="nomineeCtrl.containsMyVote(nominee)">
+        <i class="ui minus icon"></i>
+      </div>
+      <div class="ui green button" ng-click="nomineeCtrl.vote(nominee)" ng-if="!nomineeCtrl.containsMyVote(nominee) && nomineeCtrl.canVote()">
+        <i class="ui plus icon"></i>
+      </div>
+      <div class="ui grey button" ng-click="nomineeCtrl.destroyNominee(nominee)" ng-if="appCtrl.currentUser().admin">
+        <i class="ui remove icon"></i>
+      </div>
+      <div class="ui blue button" ng-click="nomineeCtrl.showVoters(nominee)" ng-if="nominee.voters.length !== 0">
+        <i class="ui search icon"></i>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="ui icon info message">
-  <i class="idea icon"></i>
-  <div class="content">
-    <div class="header">
-      ¿Quieres proponer un producto?
+  <div class="ui long modal">
+    <i class="close icon"></i>
+    <h1 class="aligner">
+      Votantes de {{ nomineeCtrl.selectedNominee.name }}
+    </h1>
+    <div class="user-list">
+      <div ng-repeat="voter in nomineeCtrl.selectedNominee.voters">
+        <img class="ui avatar image" ng-src="{{ voter.facebook.photo }}">
+        <span>{{ voter.facebook.name }}</span>
+      </div>
     </div>
-    <p>
-      ¡Acércate a nosotros para conversarlo!
-    </p>
+  </div>
+
+  <div class="ui icon info message">
+    <i class="idea icon"></i>
+    <div class="content">
+      <div class="header">
+        ¿Quieres proponer un producto?
+      </div>
+      <p>
+        ¡Acércate a nosotros para conversarlo!
+      </p>
+    </div>
   </div>
 </div>

@@ -18,6 +18,6 @@ module.exports = (err, req, res, next) => {
     errors.messages.push('Resource not found');
     res.status(404).json(errors);
   } else {
-    return next(err, req, res);
+    return next();
   }
 };

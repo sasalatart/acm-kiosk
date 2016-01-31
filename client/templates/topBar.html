@@ -1,0 +1,22 @@
+<div class="ui secondary menu aligner">
+  <a class="item" ng-href="/#/productElection">
+    <i class="shop icon"></i>
+    <span>Votar</span>
+  </a>
+  <a class="item" ng-href="/#/stock">
+    <i class="bar chart icon"></i>
+    <span>Stock</span>
+  </a>
+  <a class="item" ng-href="/#/accounting" ng-if="appCtrl.currentUser().admin">
+    <i class="money icon"></i>
+    <span>Cuentas</span>
+  </a>
+  <a class="item" ng-href="/#/users">
+    <i class="users icon"></i>
+    <span>Usuarios</span>
+  </a>
+  <a class="item" href="/logout">
+    <img alt="user" class="ui img profile" ng-src="{{ appCtrl.currentUser().facebook.photo }}"/>
+    <span>Cerrar sesión</span>
+  </a>
+</div>

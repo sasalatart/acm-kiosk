@@ -1,3 +1,4 @@
 (function() {
-  require('./navBarDirective');
+  require('./topBarDirective');
+  require('./botBarDirective');
 })();

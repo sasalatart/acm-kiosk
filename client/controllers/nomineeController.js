@@ -15,7 +15,17 @@
         swal('Oops...', '¡Debes iniciar sesión para hacer esto!', 'error');
       } else {
         vm.identity = identity;
-        index();
+
+        vm.index = function() {
+          $http.get('/nominees')
+            .then(function success(response) {
+              vm.nominees = response.data.nominees;
+              vm.identity.votes = response.data.myVotes;
+            }, function error(response) {
+              errorService.handler(response.data);
+            });
+        };
+        vm.index();
 
         vm.newNominee = function() {
           var nominee = new Nominee();
@@ -38,7 +48,7 @@
               vm.identity.votes.splice(index, 1);
             }
           }, function(error) {
-            index();
+            vm.index();
             errorService.handler(error.data);
           });
         };
@@ -49,7 +59,7 @@
               errorService.handler(response.data);
             })
             .finally(function() {
-              index();
+              vm.index();
             });
         };
 
@@ -59,7 +69,7 @@
               errorService.handler(response.data);
             })
             .finally(function() {
-              index();
+              vm.index();
             });
         };
 
@@ -100,16 +110,6 @@
         vm.canVote = function() {
           return vm.identity.votes.length < 3;
         };
-
-        function index() {
-          $http.get('/nominees')
-            .then(function success(response) {
-              vm.nominees = response.data.nominees;
-              vm.identity.votes = response.data.myVotes;
-            }, function error(response) {
-              errorService.handler(response.data);
-            });
-        }
       }
     });
   }

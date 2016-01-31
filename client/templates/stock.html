@@ -1,33 +1,31 @@
-<h1 class="ui huge header center aligned">
-  <div class="content">
-    Stock
-    <div class="sub header">
-      Lo que hay.
+<div class="stock">
+  <h1 class="ui huge header center aligned">
+    <div class="content">
+      Stock
     </div>
+  </h1>
+
+  <div class="aligner">
+    <table class="ui large padded table">
+      <thead>
+        <tr class="center aligned">
+          <th rowspan="2">Producto</th>
+          <th colspan="2">Cajas</th>
+          <th rowspan="2">Unidades/Caja</th>
+        </tr>
+        <tr class="center aligned">
+          <th>En Kiosko</th>
+          <th>En Bodega</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="center aligned" ng-repeat="product in stockCtrl.products">
+          <td>{{ product.name }}</td>
+          <td ng-class="{ 'negative disabled': product.packsDisplayed === 0 }">{{ product.packsDisplayed }}</td>
+          <td ng-class="{ 'negative disabled': product.packsStored === 0 }">{{ product.packsStored }}</td>
+          <td>{{ product.unitsPerPack }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</h1>
-
-
-<div class="horizontal-center">
-  <table class="ui large padded table">
-    <thead>
-      <tr class="center aligned">
-        <th rowspan="2">Producto</th>
-        <th colspan="2">Cajas</th>
-        <th rowspan="2">Unidades/Caja</th>
-      </tr>
-      <tr class="center aligned">
-        <th>En Kiosko</th>
-        <th>En Bodega</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="center aligned" ng-repeat="product in stockCtrl.products">
-        <td>{{ product.name }}</td>
-        <td ng-class="{ 'negative disabled': product.packsDisplayed === 0 }">{{ product.packsDisplayed }}</td>
-        <td ng-class="{ 'negative disabled': product.packsStored === 0 }">{{ product.packsStored }}</td>
-        <td>{{ product.unitsPerPack }}</td>
-      </tr>
-    </tbody>
-  </table>
 </div>

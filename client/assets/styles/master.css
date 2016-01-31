@@ -1,5 +1,5 @@
-html,
 body {
+  align-items: stretch;
   background: #a6a2a2;
   background: -webkit-linear-gradient(#a6a2a2, #fbfbf2);
   background: -o-linear-gradient(#a6a2a2, #fbfbf2);
@@ -7,30 +7,52 @@ body {
   background: linear-gradient(#a6a2a2, #fbfbf2);
   background-attachment: fixed;
   background-repeat: no-repeat;
-  height: 100%;
-  margin: 0;
-  padding: 2em 0;
-}
-
-.horizontal-center {
   display: flex;
   justify-content: center;
 }
 
-.horizontal-center-space-between {
+.aligner {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.aligner-space-between {
+  align-items: center;
   display: flex;
   justify-content: space-between;
 }
 
-.vertical-center {
+.aligner-space-around {
   align-items: center;
   display: flex;
-  min-height: 100%;
+  justify-content: space-around;
 }
 
 .flex-column {
   display: flex;
   flex-direction: column;
+}
+
+.bar {
+  align-items: baseline;
+  flex: 1 1 auto;
+}
+
+img.profile {
+  height: 1em;
+}
+
+.views {
+  flex: 18;
+  position: relative;
+}
+
+.welcome {
+  height: 100%;
+  overflow-y: auto;
+  position: absolute;
+  width: 100%;
 }
 
 .title {
@@ -69,6 +91,7 @@ progress + span {
   left: 2.5%;
   line-height: 1.5em;
   position: relative;
+  text-shadow: -1px 0 #000000, 0 1px #000000, 1px 0 #000000, 0 -1px #000000;
   top: -1.75em;
 }
 
@@ -85,7 +108,7 @@ progress + span {
   border-color: #78fa89 !important;
 }
 
-.users {
+.user-list {
   -webkit-columns: 3 15em;
   -moz-columns: 3 15em;
   columns: 3 15em;

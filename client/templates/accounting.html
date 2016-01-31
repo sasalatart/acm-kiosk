@@ -1,181 +1,183 @@
-<h1 class="ui huge header center aligned">
-  <div class="content">
-    Registros
-  </div>
-</h1>
-
-<div class="horizontal-center" ng-if="productCtrl.action === 'add'">
-  <form class="ui form" name="productCtrl.newForm" novalidate>
-    <div class="fields">
-      <div class="field">
-        <label for="name">Nombre</label>
-        <input id="name" ng-model="productCtrl.productForm.name" required type="text">
-      </div>
-      <div class="field">
-        <label for="cost-box">Costo/Caja</label>
-        <input id="cost-box" ng-model="productCtrl.productForm.costPerPack" required type="number">
-      </div>
-      <div class="field">
-        <label for="units-box">Unidades/Caja</label>
-        <input id="units-box" ng-model="productCtrl.productForm.unitsPerPack" required type="number">
-      </div>
-      <div class="field">
-        <label for="price-unit">Precio/Unidad</label>
-        <input id="price-unit" ng-model="productCtrl.productForm.price" required type="number">
-      </div>
-      <div class="field">
-        <label for="potential-profit">E(Balance/Caja)</label>
-        <input id="potential-profit" placeholder="{{ productCtrl.potentialProfit() | currency:'$':0}}" disabled type="number">
-      </div>
+<div class="accounting">
+  <h1 class="ui huge header center aligned">
+    <div class="content">
+      Registros
     </div>
-  </form>
-</div>
+  </h1>
 
-<table class="ui structured compact celled table">
-  <thead>
-    <tr class="center aligned">
-      <th rowspan="2">Nombre</th>
-      <th colspan="2">Cajas</th>
-      <th rowspan="2">Unidades/Caja</th>
-      <th rowspan="2">Costo/Caja</th>
-      <th rowspan="2">Costo/Unidad</th>
-      <th rowspan="2">Precio</th>
-      <th rowspan="2">Balance Esperado</th>
-      <th colspan="2">Acciones</th>
-    </tr>
-    <tr class="center aligned">
-      <th>en Kiosko</th>
-      <th>en Bodega</th>
-      <th>
-        <select ng-model="productCtrl.action">
-          <option selected value="">Seleccionar Acción</option>
-          <option value="add">Agregar Producto</option>
-          <option value="buy">Registrar Compra</option>
-          <option value="move">Mover a Kiosko</option>
-        </select>
-        <div>
-          <input class="ui green button" ng-class="{ 'disabled': !productCtrl.newForm.$valid }" ng-click="productCtrl.newForm.$valid && productCtrl.newProduct()" ng-if="productCtrl.action === 'add'" type="submit"></input>
-          <input class="ui green button" ng-click="productCtrl.buyProducts()" ng-if="productCtrl.action === 'buy'" type="submit"></input>
-          <input class="ui green button" ng-click="productCtrl.moveProducts()" ng-if="productCtrl.action === 'move'" type="submit"></input>
+  <div class="aligner" ng-if="productCtrl.action === 'add'">
+    <form class="ui form" name="productCtrl.newForm" novalidate>
+      <div class="fields">
+        <div class="field">
+          <label for="name">Nombre</label>
+          <input id="name" ng-model="productCtrl.productForm.name" required type="text">
         </div>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr class="center aligned" ng-repeat="product in productCtrl.products">
-      <td>
-        <span ng-if="!product.editing">{{ product.name }}</span>
-        <input ng-if="product.editing" ng-model="product.editName" placeholder="{{ product.name }}" type="text">
-      </td>
-      <td>
-        <span>{{ product.packsDisplayed }}</span>
-        <i class="ui red arrow circle down icon" ng-click="productCtrl.removeFromDisplay(product)" ng-if="product.packsDisplayed !== 0"></i>
-      </td>
-      <td>
-        {{ product.packsStored }}
-      </td>
-      <td>
-        <span ng-if="!product.editing">{{ product.unitsPerPack }}</span>
-        <input ng-if="product.editing" ng-model="product.editUnitsPerPack" placeholder="{{ product.unitsPerPack }}" type="number">
-      </td>
-      <td class="right aligned">
-        <span ng-if="!product.editing">{{ product.costPerPack | currency:"$":0 }}</span>
-        <input ng-if="product.editing" ng-model="product.editCostPerPack" placeholder="{{ product.costPerPack }}" type="number">
-      </td>
-      <td class="right aligned">
-        {{ productCtrl.costPerUnit(product) | currency:"$":0 }}
-      </td>
-      <td class="right aligned">
-        <span ng-if="!product.editing">{{ product.price | currency:"$":0}}</span>
-        <input ng-if="product.editing" ng-model="product.editPrice" placeholder="{{ product.price }}" type="number">
-      </td>
-      <td class="right aligned">
-        {{ productCtrl.profitForProduct(product) | currency:"$":0 }}
-      </td>
-      <td>
-        <span ng-if="productCtrl.action !== 'buy' && productCtrl.action !== 'move'">
-          <span ng-if="!product.editing">
-            <button class="ui yellow icon button" ng-click="product.editing = !product.editing">
-              <i class="edit icon"></i>
-            </button>
-            <button class="ui red icon button" ng-click="productCtrl.deleteProduct(product)">
-              <i class="remove icon"></i>
-            </button>
-          </span>
-          <span ng-if="product.editing">
-            <button class="ui green icon button" ng-click="productCtrl.updateProduct(product)">
-              <i class="save icon"></i>
-            </button>
-            <button class="ui grey icon button" ng-click="product.editing = !product.editing">
-              <i class="ban icon"></i>
-            </button>
-          </span>
-        </span>
-        <input ng-if="productCtrl.action === 'buy'" ng-model="product.quantityBought" placeholder="#Cajas (0)" type="number">
-        <input ng-if="productCtrl.action === 'move'" ng-model="product.quantityToMove" placeholder="#Cajas (0)" type="number">
-      </td>
-    </tr>
-  </tbody>
-  <tfoot ng-if="productCtrl.products.length">
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th class="right aligned">Total:
-        {{ productCtrl.totalCost(productCtrl.products) | currency:"$":0 }}</th>
-      <th></th>
-      <th></th>
-      <th class="right aligned">Total:
-        {{ productCtrl.totalProfit(productCtrl.products) | currency:"$":0 }}</th>
-      <th></th>
-    </tr>
-  </tfoot>
-</table>
-
-<div class="ui divider"></div>
-
-<h1 class="ui huge header center aligned">
-  <div class="content">
-    Compras Anteriores
+        <div class="field">
+          <label for="cost-box">Costo/Caja</label>
+          <input id="cost-box" ng-model="productCtrl.productForm.costPerPack" required type="number">
+        </div>
+        <div class="field">
+          <label for="units-box">Unidades/Caja</label>
+          <input id="units-box" ng-model="productCtrl.productForm.unitsPerPack" required type="number">
+        </div>
+        <div class="field">
+          <label for="price-unit">Precio/Unidad</label>
+          <input id="price-unit" ng-model="productCtrl.productForm.price" required type="number">
+        </div>
+        <div class="field">
+          <label for="potential-profit">E(Balance/Caja)</label>
+          <input id="potential-profit" placeholder="{{ productCtrl.potentialProfit() | currency:'$':0 }}" disabled type="number">
+        </div>
+      </div>
+    </form>
   </div>
-</h1>
 
-<div class="horizontal-center">
-  <select ng-if="productCtrl.carts.length !== 0" ng-model="productCtrl.selectedCartID">
-    <option disabled selected value="">Seleccionar Fecha de Compra</option>
-    <option ng-repeat="cart in productCtrl.carts" value="{{ cart._id }}">{{ cart.date.substring(0, 10) }}</option>
-  </select>
+  <table class="ui structured compact celled table">
+    <thead>
+      <tr class="center aligned">
+        <th rowspan="2">Nombre</th>
+        <th colspan="2">Cajas</th>
+        <th rowspan="2">Unidades/Caja</th>
+        <th rowspan="2">Costo/Caja</th>
+        <th rowspan="2">Costo/Unidad</th>
+        <th rowspan="2">Precio</th>
+        <th rowspan="2">Balance Esperado</th>
+        <th colspan="2">Acciones</th>
+      </tr>
+      <tr class="center aligned">
+        <th>en Kiosko</th>
+        <th>en Bodega</th>
+        <th>
+          <select class="ui dropdown" ng-model="productCtrl.action">
+            <option selected value="">Seleccionar Acción</option>
+            <option value="add">Agregar Producto</option>
+            <option value="buy">Registrar Compra</option>
+            <option value="move">Mover a Kiosko</option>
+          </select>
+          <div>
+            <input class="ui green button" ng-class="{ 'disabled': !productCtrl.newForm.$valid }" ng-click="productCtrl.newForm.$valid && productCtrl.newProduct()" ng-if="productCtrl.action === 'add'" type="submit"></input>
+            <input class="ui green button" ng-click="productCtrl.buyProducts()" ng-if="productCtrl.action === 'buy'" type="submit"></input>
+            <input class="ui green button" ng-click="productCtrl.moveProducts()" ng-if="productCtrl.action === 'move'" type="submit"></input>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="center aligned" ng-repeat="product in productCtrl.products">
+        <td>
+          <span ng-if="!product.editing">{{ product.name }}</span>
+          <input ng-if="product.editing" ng-model="product.editName" placeholder="{{ product.name }}" type="text">
+        </td>
+        <td>
+          <span>{{ product.packsDisplayed }}</span>
+          <i class="ui red arrow circle down icon" ng-click="productCtrl.removeFromDisplay(product)" ng-if="product.packsDisplayed !== 0"></i>
+        </td>
+        <td>
+          {{ product.packsStored }}
+        </td>
+        <td>
+          <span ng-if="!product.editing">{{ product.unitsPerPack }}</span>
+          <input ng-if="product.editing" ng-model="product.editUnitsPerPack" placeholder="{{ product.unitsPerPack }}" type="number">
+        </td>
+        <td class="right aligned">
+          <span ng-if="!product.editing">{{ product.costPerPack | currency:"$":0 }}</span>
+          <input ng-if="product.editing" ng-model="product.editCostPerPack" placeholder="{{ product.costPerPack }}" type="number">
+        </td>
+        <td class="right aligned">
+          {{ productCtrl.costPerUnit(product) | currency:"$":0 }}
+        </td>
+        <td class="right aligned">
+          <span ng-if="!product.editing">{{ product.price | currency:"$":0 }}</span>
+          <input ng-if="product.editing" ng-model="product.editPrice" placeholder="{{ product.price }}" type="number">
+        </td>
+        <td class="right aligned">
+          {{ productCtrl.profitForProduct(product) | currency:"$":0 }}
+        </td>
+        <td>
+          <span ng-if="productCtrl.action !== 'buy' && productCtrl.action !== 'move'">
+            <span ng-if="!product.editing">
+              <button class="ui yellow icon button" ng-click="product.editing = !product.editing">
+                <i class="edit icon"></i>
+              </button>
+              <button class="ui red icon button" ng-click="productCtrl.deleteProduct(product)">
+                <i class="remove icon"></i>
+              </button>
+            </span>
+            <span ng-if="product.editing">
+              <button class="ui green icon button" ng-click="productCtrl.updateProduct(product)">
+                <i class="save icon"></i>
+              </button>
+              <button class="ui grey icon button" ng-click="product.editing = !product.editing">
+                <i class="ban icon"></i>
+              </button>
+            </span>
+          </span>
+          <input ng-if="productCtrl.action === 'buy'" ng-model="product.quantityBought" placeholder="#Cajas (0)" type="number">
+          <input ng-if="productCtrl.action === 'move'" ng-model="product.quantityToMove" placeholder="#Cajas (0)" type="number">
+        </td>
+      </tr>
+    </tbody>
+    <tfoot ng-if="productCtrl.products.length">
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th class="right aligned">Total:
+          {{ productCtrl.totalCost(productCtrl.products) | currency:"$":0 }}</th>
+        <th></th>
+        <th></th>
+        <th class="right aligned">Total:
+          {{ productCtrl.totalProfit(productCtrl.products) | currency:"$":0 }}</th>
+        <th></th>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="ui divider"></div>
+
+  <h1 class="ui huge header center aligned">
+    <div class="content">
+      Compras Anteriores
+    </div>
+  </h1>
+
+  <div class="aligner">
+    <select class="ui dropdown" ng-if="productCtrl.carts.length !== 0" ng-model="productCtrl.selectedCartID">
+      <option disabled selected value="">Seleccionar Fecha de Compra</option>
+      <option ng-repeat="cart in productCtrl.carts" value="{{ cart._id }}">{{ cart.date.substring(0, 10) }}</option>
+    </select>
+  </div>
+
+  <table class="ui structured compact celled table" ng-if="cart._id === productCtrl.selectedCartID" ng-repeat="cart in productCtrl.carts">
+    <thead>
+      <tr class="center aligned">
+        <th>Nombre</th>
+        <th>Cajas</th>
+        <th>Costo/Caja</th>
+        <th>Precio/Unidad</th>
+        <th>Balance Esperado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="center aligned" ng-repeat="product in cart.products">
+        <td>{{ product.name }}</td>
+        <td>{{ product.boughtLastTime }}</td>
+        <td class="right aligned">{{ product.costPerPack | currency:"$":0 }}</td>
+        <td class="right aligned">{{ product.price | currency:"$":0 }}</td>
+        <td class="right aligned">{{ productCtrl.profitForProduct(product) | currency:"$":0 }}</td>
+      </tr>
+    </tbody>
+    <tfoot ng-if="cart.products.length">
+      <tr>
+        <th></th>
+        <th></th>
+        <th class="right aligned">Total:
+          {{ productCtrl.totalCost(cart.products, true) | currency:"$":0 }}</th>
+        <th></th>
+        <th class="right aligned">Total:
+          {{ productCtrl.totalProfit(cart.products, true) | currency:"$":0 }}</th>
+      </tr>
+    </tfoot>
+  </table>
 </div>
-
-<table class="ui structured compact celled table" ng-if="cart._id === productCtrl.selectedCartID" ng-repeat="cart in productCtrl.carts">
-  <thead>
-    <tr class="center aligned">
-      <th>Nombre</th>
-      <th>Cajas</th>
-      <th>Costo/Caja</th>
-      <th>Precio/Unidad</th>
-      <th>Balance Esperado</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr class="center aligned" ng-repeat="product in cart.products">
-      <td>{{ product.name }}</td>
-      <td>{{ product.boughtLastTime }}</td>
-      <td class="right aligned">{{ product.costPerPack | currency:"$":0 }}</td>
-      <td class="right aligned">{{ product.price | currency:"$":0 }}</td>
-      <td class="right aligned">{{ productCtrl.profitForProduct(product) | currency:"$":0 }}</td>
-    </tr>
-  </tbody>
-  <tfoot ng-if="cart.products.length">
-    <tr>
-      <th></th>
-      <th></th>
-      <th class="right aligned">Total:
-        {{ productCtrl.totalCost(cart.products, true) | currency:"$":0 }}</th>
-      <th></th>
-      <th class="right aligned">Total:
-        {{ productCtrl.totalProfit(cart.products, true) | currency:"$":0 }}</th>
-    </tr>
-  </tfoot>
-</table>

@@ -4,9 +4,7 @@
   function router($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'welcome.html',
-        controller: 'appController',
-        controllerAs: 'appCtrl'
+        templateUrl: 'welcome.html'
       })
       .when('/productElection', {
         templateUrl: 'productElection.html',

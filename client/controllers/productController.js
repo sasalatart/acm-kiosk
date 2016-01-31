@@ -140,9 +140,9 @@
 
         vm.profitForProduct = function(product, cart) {
           if (cart) {
-            return product.boughtLastTime * product.unitsPerPack * product.price;
+            return product.boughtLastTime * product.unitsPerPack * product.price - vm.costForProduct(product, cart);
           } else {
-            return (product.packsStored + product.packsDisplayed) * ((product.price * product.unitsPerPack) - product.costPerPack);
+            return (product.packsStored + product.packsDisplayed) * (product.price * product.unitsPerPack) - vm.costForProduct(product, cart);
           }
         };
 
