@@ -161,6 +161,14 @@
             return sum + current;
           });
         };
+
+        vm.potentialProfit = function() {
+          if (vm.productForm) {
+            return (vm.productForm.unitsPerPack * vm.productForm.price) - vm.productForm.costPerPack;
+          } else {
+            return 0;
+          }
+        };
       }
     });
   }

@@ -23,6 +23,10 @@
         <label for="price-unit">Precio/Unidad</label>
         <input id="price-unit" ng-model="productCtrl.productForm.price" required type="number">
       </div>
+      <div class="field">
+        <label for="potential-profit">E(Balance/Caja)</label>
+        <input id="potential-profit" placeholder="{{ productCtrl.potentialProfit() | currency:'$':0}}" disabled type="number">
+      </div>
     </div>
   </form>
 </div>
@@ -107,8 +111,8 @@
             </button>
           </span>
         </span>
-        <input ng-if="productCtrl.action === 'buy'" ng-model="product.quantityBought" placeholder="0" type="number">
-        <input ng-if="productCtrl.action === 'move'" ng-model="product.quantityToMove" placeholder="0" type="number">
+        <input ng-if="productCtrl.action === 'buy'" ng-model="product.quantityBought" placeholder="#Cajas (0)" type="number">
+        <input ng-if="productCtrl.action === 'move'" ng-model="product.quantityToMove" placeholder="#Cajas (0)" type="number">
       </td>
     </tr>
   </tbody>
@@ -128,6 +132,14 @@
     </tr>
   </tfoot>
 </table>
+
+<div class="ui divider"></div>
+
+<h1 class="ui huge header center aligned">
+  <div class="content">
+    Compras Anteriores
+  </div>
+</h1>
 
 <div class="horizontal-center">
   <select ng-if="productCtrl.carts.length !== 0" ng-model="productCtrl.selectedCartID">

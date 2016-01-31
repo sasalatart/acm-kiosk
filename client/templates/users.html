@@ -15,11 +15,12 @@
 
 <div class="users">
   <div ng-repeat="user in userCtrl.users | orderBy : 'facebook.name' | filter : searchText">
+    <i class="ui yellow inverted circular star icon" ng-if="user.admin"></i>
     <img class="ui avatar image" ng-src="{{ user.facebook.photo }}">
     <span>{{ user.facebook.name }}</span>
     <span ng-click="userCtrl.toggleAdmin(user)" ng-if="userCtrl.sessionService.getIdentity().admin">
-      <i class="ui red arrow circle down icon" ng-if="user.admin"></i>
-      <i class="ui green arrow circle up icon" ng-if="!user.admin"></i>
+      <i class="ui red inverted circular arrow down link icon" ng-if="user.admin"></i>
+      <i class="ui green inverted circular arrow up link icon" ng-if="!user.admin"></i>
     </span>
   </div>
 </div>
