@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
+var autoprefixer = require('gulp-autoprefixer');
 var minifyCSS = require('gulp-minify-css');
 var uglifyCSS = require('gulp-uglifycss');
 var minifyHTML = require('gulp-minify-html');
@@ -13,6 +14,7 @@ gulp.task('build-js', () => {
 
 gulp.task('build-css', () => {
   gulp.src('client/assets/**/*.css')
+    .pipe(autoprefixer())
     .pipe(minifyCSS({ compatibility: 'ie8' }))
     .pipe(uglifyCSS())
     .pipe(rename({ suffix: '.min' }))

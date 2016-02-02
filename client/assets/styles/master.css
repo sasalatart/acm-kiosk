@@ -1,9 +1,6 @@
 body {
   align-items: stretch;
   background: #a6a2a2;
-  background: -webkit-linear-gradient(#a6a2a2, #fbfbf2);
-  background: -o-linear-gradient(#a6a2a2, #fbfbf2);
-  background: -moz-linear-gradient(#a6a2a2, #fbfbf2);
   background: linear-gradient(#a6a2a2, #fbfbf2);
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -109,8 +106,6 @@ progress + span {
 }
 
 .user-list {
-  -webkit-columns: 3 15em;
-  -moz-columns: 3 15em;
   columns: 3 15em;
   margin-top: 1em;
 }
