@@ -97,7 +97,7 @@
 
         vm.showVoters = function(nominee) {
           vm.selectedNominee = nominee;
-          $('.ui.long.modal').modal('show');
+          $('#voters').modal('show');
         };
 
         vm.containsMyVote = function(nominee) {
