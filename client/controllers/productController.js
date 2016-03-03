@@ -126,6 +126,18 @@
           vm.action = '';
         };
 
+        vm.deleteCart = function() {
+          Cart.delete({
+            id: vm.selectedCartID
+          }, function() {
+            var index = vm.carts.map(cart => cart._id).indexOf(vm.selectedCartID);
+            if (index !== -1) vm.carts.splice(index, 1);
+            vm.selectedCartID = undefined;
+          }, function(error) {
+            errorService.handler(error.data);
+          });
+        };
+
         vm.costPerUnit = function(product) {
           return product.costPerPack / product.unitsPerPack;
         };

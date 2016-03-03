@@ -11,9 +11,7 @@ module.exports = function(app, passport) {
     });
   });
 
-  app.get('/auth/facebook', passport.authenticate('facebook', {
-    scope: 'email'
-  }));
+  app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
   app.get('/auth/facebook/callback', sessionCtrl.login);
   app.get('/logout', sessionCtrl.isAuth, sessionCtrl.logout);
   app.get('/getUser', sessionCtrl.getUser);
@@ -31,10 +29,11 @@ module.exports = function(app, passport) {
   app.get('/products', sessionCtrl.isAuth, productCtrl.index);
   app.post('/products', sessionCtrl.isAdmin, productCtrl.create);
   app.put('/products/:id', sessionCtrl.isAdmin, productCtrl.update);
+  app.delete('/products/:id', sessionCtrl.isAdmin, productCtrl.delete);
   app.post('/products/buy', sessionCtrl.isAdmin, productCtrl.buy);
   app.post('/products/move', sessionCtrl.isAdmin, productCtrl.move);
-  app.delete('/products/:id', sessionCtrl.isAdmin, productCtrl.delete);
   app.get('/carts', sessionCtrl.isAdmin, productCtrl.getCarts);
+  app.delete('/carts/:id', sessionCtrl.isAdmin, productCtrl.deleteCart);
 
   app.use((err, req, res, next) => {
     validationErrorMessages(err, req, res, next);

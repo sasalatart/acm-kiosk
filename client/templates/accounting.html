@@ -147,6 +147,9 @@
       <option disabled selected value="">Seleccionar Fecha de Compra</option>
       <option ng-repeat="cart in productCtrl.carts" value="{{ cart._id }}">{{ cart.date.substring(0, 10) }}</option>
     </select>
+    <button class="ui red icon button" ng-click="productCtrl.deleteCart()" ng-if="productCtrl.selectedCartID">
+      <i class="remove icon"></i>
+    </button>
   </div>
 
   <table class="ui structured compact celled table" ng-if="cart._id === productCtrl.selectedCartID" ng-repeat="cart in productCtrl.carts">
