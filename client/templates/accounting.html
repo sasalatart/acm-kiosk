@@ -73,11 +73,15 @@
           <input ng-if="product.editing" ng-model="product.editName" placeholder="{{ product.name }}" type="text">
         </td>
         <td>
-          <span>{{ product.packsDisplayed }}</span>
-          <i class="ui red arrow circle down link icon" ng-click="productCtrl.removeFromDisplay(product)" ng-if="product.packsDisplayed !== 0"></i>
+          <span ng-if="!product.editing">
+            {{ product.packsDisplayed }}
+            <i class="ui red arrow circle down link icon" ng-click="productCtrl.removeFromDisplay(product)" ng-if="product.packsDisplayed !== 0"></i>
+          </span>
+          <input ng-if="product.editing" ng-model="product.editPacksDisplayed" placeholder="{{ product.packsDisplayed }}" type="number">
         </td>
         <td>
-          {{ product.packsStored }}
+          <span ng-if="!product.editing">{{ product.packsStored }}</span>
+          <input ng-if="product.editing" ng-model="product.editPacksStored" placeholder="{{ product.packsStored }}" type="number">
         </td>
         <td>
           <span ng-if="!product.editing">{{ product.unitsPerPack }}</span>

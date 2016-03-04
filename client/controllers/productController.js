@@ -41,12 +41,16 @@
             name: product.editName || product.name,
             costPerPack: product.editCostPerPack || product.costPerPack,
             unitsPerPack: product.editUnitsPerPack || product.unitsPerPack,
-            price: product.editPrice || product.price
+            price: product.editPrice || product.price,
+            packsStored: product.editPacksStored || product.packsStored,
+            packsDisplayed: product.editPacksDisplayed || product.packsDisplayed
           }, function(updatedProduct) {
             product.name = updatedProduct.name;
             product.costPerPack = updatedProduct.costPerPack;
             product.unitsPerPack = updatedProduct.unitsPerPack;
             product.price = updatedProduct.price;
+            product.packsStored = updatedProduct.packsStored;
+            product.packsDisplayed = updatedProduct.packsDisplayed;
           }, function(error) {
             errorService.handler(error.data);
           });

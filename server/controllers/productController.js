@@ -28,10 +28,11 @@ module.exports = {
   update: (req, res, next) => {
     Product.findOne({ _id: req.params.id }).then(product => {
       product.name = req.query.name || product.name;
-      product.packsDisplayed = req.query.packsDisplayed || product.packsDisplayed;
       product.costPerPack = req.query.costPerPack || product.costPerPack;
       product.unitsPerPack = req.query.unitsPerPack || product.unitsPerPack;
       product.price = req.query.price || product.price;
+      product.packsDisplayed = req.query.packsDisplayed || product.packsDisplayed;
+      product.packsStored = req.query.packsStored || product.packsStored;
       return product.save().then(product => res.status(200).json(product));
     })
     .catch(next);
