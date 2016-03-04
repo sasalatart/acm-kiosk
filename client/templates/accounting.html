@@ -25,28 +25,48 @@
           <input id="price-unit" ng-model="productCtrl.productForm.price" required type="number">
         </div>
         <div class="field">
-          <label for="potential-profit">E(Balance/Caja)</label>
+          <label for="potential-profit">Balance/Caja</label>
           <input id="potential-profit" placeholder="{{ productCtrl.potentialProfit() | currency:'$':0 }}" disabled type="number">
         </div>
       </div>
     </form>
   </div>
 
-  <table class="ui structured compact celled table">
+  <table class="ui structured compact sortable celled table">
     <thead>
       <tr class="center aligned">
-        <th rowspan="2">Nombre</th>
-        <th colspan="2">Cajas</th>
-        <th rowspan="2">Unidades/Caja</th>
-        <th rowspan="2">Costo/Caja</th>
-        <th rowspan="2">Costo/Unidad</th>
-        <th rowspan="2">Precio</th>
-        <th rowspan="2">Balance Esperado</th>
-        <th colspan="2">Acciones</th>
+        <th rowspan="2" ng-class="productCtrl.sortingClass('name')" ng-click="productCtrl.sortBy('name')">
+          Nombre
+        </th>
+        <th colspan="2">
+          Cajas
+        </th>
+        <th rowspan="2" ng-class="productCtrl.sortingClass('unitsPerPack')" ng-click="productCtrl.sortBy('unitsPerPack')">
+          Unidades/Caja
+        </th>
+        <th rowspan="2" ng-class="productCtrl.sortingClass('costPerPack')" ng-click="productCtrl.sortBy('costPerPack')">
+          Costo/Caja
+        </th>
+        <th rowspan="2" ng-class="productCtrl.sortingClass('costPerUnit')" ng-click="productCtrl.sortBy('costPerUnit')">
+          Costo/Unidad
+        </th>
+        <th rowspan="2" ng-class="productCtrl.sortingClass('price')" ng-click="productCtrl.sortBy('price')">
+          Precio
+        </th>
+        <th rowspan="2" ng-class="productCtrl.sortingClass('balance')" ng-click="productCtrl.sortBy('balance')">
+          Balance Esperado
+        </th>
+        <th colspan="2">
+          Acciones
+        </th>
       </tr>
       <tr class="center aligned">
-        <th>en Kiosko</th>
-        <th>en Bodega</th>
+        <th ng-class="productCtrl.sortingClass('packsDisplayed')" ng-click="productCtrl.sortBy('packsDisplayed')">
+          en Kiosko
+        </th>
+        <th ng-class="productCtrl.sortingClass('packsStored')" ng-click="productCtrl.sortBy('packsStored')">
+          en Bodega
+        </th>
         <th>
           <select class="ui dropdown" ng-model="productCtrl.action">
             <option selected value="">Seleccionar Acción</option>

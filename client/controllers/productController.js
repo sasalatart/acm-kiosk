@@ -57,18 +57,6 @@
           product.editing = false;
         };
 
-        vm.removeFromDisplay = function(product) {
-          product.$update({
-            id: product._id,
-            packsDisplayed: product.packsDisplayed - 1
-          }, function(updatedProduct) {
-            product.packsDisplayed = updatedProduct.packsDisplayed;
-          }, function(error) {
-            errorService.handler(error.data);
-          });
-          product.editing = false;
-        };
-
         vm.deleteProduct = function(product) {
           Product.delete({
             id: product._id
@@ -128,6 +116,55 @@
           });
 
           vm.action = '';
+        };
+
+        vm.removeFromDisplay = function(product) {
+          product.$update({
+            id: product._id,
+            packsDisplayed: product.packsDisplayed - 1
+          }, function(updatedProduct) {
+            product.packsDisplayed = updatedProduct.packsDisplayed;
+          }, function(error) {
+            errorService.handler(error.data);
+          });
+          product.editing = false;
+        };
+
+        vm.sortBy = function(key) {
+          vm.sortingKey = key;
+          vm.sortingAsc = !vm.sortingAsc;
+
+          var sortingFunction = function(a, b) {
+            if (a[key] > b[key]) return (vm.sortingAsc ? 1 : -1);
+            if (a[key] < b[key]) return (vm.sortingAsc ? -1 : 1);
+            if (a[key] === b[key]) return 0;
+          };
+
+          if (key === 'costPerUnit' || key === 'balance') {
+            var comparator;
+            if (key === 'costPerUnit') {
+              comparator = vm.costPerUnit;
+            } else if (key === 'balance') {
+              comparator = vm.profitForProduct;
+            }
+
+            sortingFunction = function(a, b) {
+              if (comparator(a) > comparator(b)) return (vm.sortingAsc ? 1 : -1);
+              if (comparator(a) < comparator(b)) return (vm.sortingAsc ? -1 : 1);
+              if (comparator(a) === comparator(b)) return 0;
+            };
+          }
+
+          vm.products.sort(sortingFunction);
+        };
+
+        vm.sortingClass = function(key) {
+          var classString = '';
+          if (vm.sortingKey === key) {
+            classString = (vm.sortingAsc ? 'sorted ascending' : 'sorted descending');
+          }
+
+          return classString;
         };
 
         vm.deleteCart = function() {
