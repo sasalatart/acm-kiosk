@@ -54,11 +54,15 @@
             <option value="buy">Registrar Compra</option>
             <option value="move">Mover a Kiosko</option>
           </select>
-          <div>
-            <input class="ui green button" ng-class="{ 'disabled': !productCtrl.newForm.$valid }" ng-click="productCtrl.newForm.$valid && productCtrl.newProduct()" ng-if="productCtrl.action === 'add'" type="submit"></input>
-            <input class="ui green button" ng-click="productCtrl.buyProducts()" ng-if="productCtrl.action === 'buy'" type="submit"></input>
-            <input class="ui green button" ng-click="productCtrl.moveProducts()" ng-if="productCtrl.action === 'move'" type="submit"></input>
-          </div>
+          <button class="ui green button" ng-class="{ 'disabled': !productCtrl.newForm.$valid }" ng-click="productCtrl.newForm.$valid && productCtrl.newProduct()" ng-if="productCtrl.action === 'add'" type="submit">
+            <i class="checkmark icon"></i>
+          </button>
+          <button class="ui green button" ng-click="productCtrl.buyProducts()" ng-if="productCtrl.action === 'buy'" type="submit">
+            <i class="checkmark icon"></i>
+          </button>
+          <button class="ui green button" ng-click="productCtrl.moveProducts()" ng-if="productCtrl.action === 'move'" type="submit">
+            <i class="checkmark icon"></i>
+          </button>
         </th>
       </tr>
     </thead>
