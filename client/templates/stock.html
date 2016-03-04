@@ -6,16 +6,26 @@
   </h1>
 
   <div class="aligner">
-    <table class="ui large padded table">
+    <table class="ui structured compact sortable celled table">
       <thead>
         <tr class="center aligned">
-          <th rowspan="2">Producto</th>
-          <th colspan="2">Cajas</th>
-          <th rowspan="2">Unidades/Caja</th>
+          <th rowspan="2" ng-class="stockCtrl.sortingClass('name')" ng-click="stockCtrl.sortBy('name')">
+            Producto
+          </th>
+          <th colspan="2">
+            Cajas
+          </th>
+          <th rowspan="2" ng-class="stockCtrl.sortingClass('unitsPerPack')" ng-click="stockCtrl.sortBy('unitsPerPack')">
+            Unidades/Caja
+          </th>
         </tr>
         <tr class="center aligned">
-          <th>En Kiosko</th>
-          <th>En Bodega</th>
+          <th ng-class="stockCtrl.sortingClass('packsDisplayed')" ng-click="stockCtrl.sortBy('packsDisplayed')">
+            En Kiosko
+          </th>
+          <th ng-class="stockCtrl.sortingClass('packsStored')" ng-click="stockCtrl.sortBy('packsStored')">
+            En Bodega
+          </th>
         </tr>
       </thead>
       <tbody>

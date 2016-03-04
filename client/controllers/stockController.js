@@ -16,6 +16,28 @@
         Product.query(function(products) {
           vm.products = products;
         });
+
+        vm.sortBy = function(key) {
+          vm.sortingKey = key;
+          vm.sortingAsc = !vm.sortingAsc;
+
+          var sortingFunction = function(a, b) {
+            if (a[key] > b[key]) return (vm.sortingAsc ? 1 : -1);
+            if (a[key] < b[key]) return (vm.sortingAsc ? -1 : 1);
+            if (a[key] === b[key]) return 0;
+          };
+
+          vm.products.sort(sortingFunction);
+        };
+
+        vm.sortingClass = function(key) {
+          var classString = '';
+          if (vm.sortingKey === key) {
+            classString = (vm.sortingAsc ? 'sorted ascending' : 'sorted descending');
+          }
+
+          return classString;
+        };
       }
     });
   }
