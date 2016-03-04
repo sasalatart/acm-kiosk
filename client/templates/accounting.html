@@ -70,7 +70,7 @@
         </td>
         <td>
           <span>{{ product.packsDisplayed }}</span>
-          <i class="ui red arrow circle down icon" ng-click="productCtrl.removeFromDisplay(product)" ng-if="product.packsDisplayed !== 0"></i>
+          <i class="ui red arrow circle down link icon" ng-click="productCtrl.removeFromDisplay(product)" ng-if="product.packsDisplayed !== 0"></i>
         </td>
         <td>
           {{ product.packsStored }}
@@ -143,7 +143,7 @@
   </h1>
 
   <div class="aligner">
-    <select class="ui dropdown" ng-if="productCtrl.carts.length !== 0" ng-model="productCtrl.selectedCartID">
+    <select class="ui dropdown" ng-model="productCtrl.selectedCartID">
       <option disabled selected value="">Seleccionar Fecha de Compra</option>
       <option ng-repeat="cart in productCtrl.carts" value="{{ cart._id }}">{{ cart.date.substring(0, 10) }}</option>
     </select>
