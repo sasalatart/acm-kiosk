@@ -30,32 +30,34 @@
         vm.newNominee = function() {
           var nominee = new Nominee();
           nominee.name = vm.nomineeForm.name;
-          nominee.$save().then(function(newNominee) {
-            vm.nominees.push(newNominee);
-          }, function(error) {
-            errorService.handler(error.data);
-          });
+          nominee.$save()
+            .then(function success(newNominee) {
+              vm.nominees.push(newNominee);
+            }, function error(error) {
+              errorService.handler(error.data);
+            });
           vm.nomineeForm = {};
         };
 
         vm.destroyNominee = function(nominee) {
           Nominee.delete({
             id: nominee._id
-          }, function() {
+          }, function success() {
             vm.nominees.splice(vm.nominees.indexOf(nominee), 1);
-            var index = vm.identity.votes.indexOf(nominee._id);
-            if (index !== -1) {
-              vm.identity.votes.splice(index, 1);
-            }
-          }, function(error) {
+            vm.identity.votes.splice(vm.identity.votes.indexOf(nominee._id), 1);
             vm.index();
-            errorService.handler(error.data);
+          }, function error(response) {
+            errorService.handler(response.data);
+            vm.index();
           });
         };
 
         vm.vote = function(nominee) {
           $http.put('/nominees/' + nominee._id + '/vote')
-            .then(function success(response) {}, function error(response) {
+            .then(function success(response) {
+              nominee.voters.push(vm.identity);
+              vm.identity.votes.push(nominee._id);
+            }, function error(response) {
               errorService.handler(response.data);
             })
             .finally(function() {
@@ -65,7 +67,10 @@
 
         vm.removeVote = function(nominee) {
           $http.put('/nominees/' + nominee._id + '/removeVote')
-            .then(function success(response) {}, function error(response) {
+            .then(function success(response) {
+              nominee.voters.splice(nominee.voters.indexOf(vm.identity), 1);
+              vm.identity.votes.splice(vm.identity.votes.indexOf(nominee._id), 1);
+            }, function error(response) {
               errorService.handler(response.data);
             })
             .finally(function() {
