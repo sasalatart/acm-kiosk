@@ -85,6 +85,7 @@
             for (var i = 0; i < vm.products.length; i = i + 1) {
               vm.products[i].packsStored = response.data.products[i].packsStored;
               vm.products[i].boughtLastTime = response.data.products[i].boughtLastTime;
+              vm.products[i].quantityBought = undefined;
             }
           }, function error(response) {
             errorService.handler(response.data);
@@ -95,7 +96,6 @@
 
         vm.moveProducts = function() {
           var productsToMove = [];
-
           vm.products.forEach(function(product) {
             productsToMove.push({
               _id: product._id,
@@ -110,6 +110,7 @@
             for (var i = 0; i < vm.products.length; i = i + 1) {
               vm.products[i].packsStored = response.data[i].packsStored;
               vm.products[i].packsDisplayed = response.data[i].packsDisplayed;
+              vm.products[i].quantityToMove = undefined;
             }
           }, function error(response) {
             errorService.handler(response.data);
