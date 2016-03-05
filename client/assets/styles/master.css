@@ -33,7 +33,6 @@ body {
 
 .bar {
   align-items: baseline;
-  flex: 1 1 auto;
 }
 
 img.profile {
@@ -41,13 +40,13 @@ img.profile {
 }
 
 .views {
-  flex: 18;
+  flex: 1;
   position: relative;
 }
 
 .welcome {
   height: 100%;
-  overflow-y: auto;
+  overflow: scroll;
   position: absolute;
   width: 100%;
 }
@@ -97,14 +96,6 @@ progress + span {
   height: inherit;
 }
 
-.ng-invalid {
-  border-color: #fa787e !important;
-}
-
-.ng-valid {
-  border-color: #78fa89 !important;
-}
-
 .user-list {
   columns: 3 15em;
   margin-top: 1em;
@@ -116,4 +107,16 @@ td input[type="text"] {
 
 td input[type="number"] {
   width: 6em;
+}
+
+.message img {
+  margin-right: 1em;
+}
+
+.ng-invalid {
+  border-color: #fa787e !important;
+}
+
+.ng-valid {
+  border-color: #78fa89 !important;
 }

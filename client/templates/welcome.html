@@ -1,17 +1,18 @@
-<div class="welcome aligner flex-column">
-  <div><img alt="logo-acm" class="ui medium image" src="images/logo.gif"/></div>
+<div class="welcome aligner">
+  <img alt="logo-acm" class="ui medium image" src="images/logo.gif"/>
+  <div class="aligner flex-column">
+    <h1>
+      <span ng-if="appCtrl.currentUser()">
+        ¡Bienvenid@ {{ appCtrl.currentUser().facebook.name }}!
+      </span>
+      <span class="title" ng-if="!appCtrl.currentUser()">
+        Kiosko ACM-PUC
+      </span>
+    </h1>
 
-  <h1>
-    <span ng-if="appCtrl.currentUser()">
-      ¡Bienvenido {{ appCtrl.currentUser().facebook.name }}!
-    </span>
-    <span class="title" ng-if="!appCtrl.currentUser()">
-      Kiosko ACM-PUC
-    </span>
-  </h1>
-
-  <a class="ui huge facebook button" href="/auth/facebook" ng-if="!appCtrl.currentUser()">
-    <i class="facebook icon"></i>
-    <span>Iniciar Sesión</span>
-  </a>
+    <a class="ui huge facebook button" href="/auth/facebook" ng-if="!appCtrl.currentUser()">
+      <i class="facebook icon"></i>
+      <span>Iniciar Sesión</span>
+    </a>
+  </div>
 </div>
