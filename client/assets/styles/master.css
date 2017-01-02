@@ -46,7 +46,7 @@ img.profile {
 
 .welcome {
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
   position: absolute;
   width: 100%;
 }
