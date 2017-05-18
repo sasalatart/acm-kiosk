@@ -4,7 +4,7 @@
   "description": "ACM-PUC's kiosk management application",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js",
+    "start": "gulp build && node server/index.js",
     "watch": "gulp build && gulp watch",
     "postinstall": "bower install && gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
