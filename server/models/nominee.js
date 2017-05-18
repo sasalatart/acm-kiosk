@@ -11,5 +11,10 @@ const nomineeSchema = mongoose.Schema({
   }]
 });
 
+nomineeSchema.pre('findOneAndUpdate', function(next) {
+  this.options.runValidators = true;
+  next();
+});
+
 module.exports = mongoose.model('Nominee', nomineeSchema);
 module.exports.schema = nomineeSchema;

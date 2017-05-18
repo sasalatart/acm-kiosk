@@ -48,5 +48,10 @@ productSchema.methods.notAdminToJSON = function() {
   return object;
 };
 
+productSchema.pre('findOneAndUpdate', function(next) {
+  this.options.runValidators = true;
+  next();
+});
+
 module.exports = mongoose.model('Product', productSchema);
 module.exports.schema = productSchema;
