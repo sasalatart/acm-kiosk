@@ -17,8 +17,10 @@
   <div class="user-list">
     <div ng-repeat="user in userCtrl.users | orderBy : 'facebook.name' | filter : searchText">
       <span ng-click="userCtrl.toggleAdmin(user)" ng-if="userCtrl.sessionService.getIdentity().admin">
-        <i class="ui red inverted circular arrow down link icon" ng-if="user.admin"></i>
-        <i class="ui green inverted circular arrow up link icon" ng-if="!user.admin"></i>
+        <span ng-if="user._id !== userCtrl.sessionService.getIdentity()._id">
+          <i class="ui red inverted circular arrow down link icon" ng-if="user.admin"></i>
+          <i class="ui green inverted circular arrow up link icon" ng-if="!user.admin"></i>
+        </span>
       </span>
       <img class="ui avatar image" ng-src="{{ user.facebook.photo }}">
       <span>{{ user.facebook.name }}</span>
