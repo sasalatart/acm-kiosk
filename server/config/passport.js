@@ -1,3 +1,4 @@
+const config = require('.');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const configAuth = require('../config/auth');
 const User = require('../models/user');
@@ -15,10 +16,11 @@ module.exports = passport => {
     });
   });
 
+  const { callbackURLDev, callbackURLProd } = configAuth.facebookAuth;
   passport.use(new FacebookStrategy({
     clientID: configAuth.facebookAuth.clientID,
     clientSecret: configAuth.facebookAuth.clientSecret,
-    callbackURL: configAuth.facebookAuth.callbackURL,
+    callbackURL: config.HOST === 'localhost' ? callbackURLDev : callbackURLProd,
     profileFields: ['id', 'email', 'displayName', 'picture.width(50).height(50)']
   }, (accessToken, refreshToken, profile, done) => {
     process.nextTick(() => {
