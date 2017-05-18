@@ -4,7 +4,7 @@
   angular.module('acmKiosk').directive('topBar', topBar);
 
   function topBar() {
-    var directive = {
+    const directive = {
       restrict: 'E',
       templateUrl: 'topBar.html',
       replace: true

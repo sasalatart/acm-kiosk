@@ -6,16 +6,11 @@
   appController.$inject = ['sessionService'];
 
   function appController(sessionService) {
-    var vm = this;
+    const vm = this;
 
-    sessionService.identity().then(function(identity) {
-      vm.currentUser = function() {
-        return sessionService.getIdentity();
-      };
-
-      vm.logout = function() {
-        sessionService.logout();
-      };
+    sessionService.identity().then(identity => {
+      vm.currentUser = () => sessionService.getIdentity();
+      vm.logout = () => sessionService.logout();
     });
   }
 })();

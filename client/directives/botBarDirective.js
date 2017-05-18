@@ -4,7 +4,7 @@
   angular.module('acmKiosk').directive('botBar', botBar);
 
   function botBar() {
-    var directive = {
+    const directive = {
       restrict: 'E',
       templateUrl: 'botBar.html',
       replace: true

@@ -4,25 +4,24 @@
   angular.module('acmKiosk').service('sessionService', sessionService);
 
   function sessionService($http, $q, $window) {
-    var _identity;
+    let _identity;
 
-    var logout = function() {
-      $http.get('/logout').then(function() {
+    const logout = () => {
+      $http.get('/logout').then(() => {
         $window.location.href = '/#/';
         _identity = undefined;
       });
     };
 
-    var identity = function(setIdentity) {
+    const identity = setIdentity => {
       if (setIdentity) {
         _identity = setIdentity;
         return;
       }
 
-      var deferred = $q.defer();
+      const deferred = $q.defer();
 
-      $http.get('/getUser')
-        .then(function success(response) {
+      $http.get('/current_user').then(function success(response) {
           _identity = response.data;
           deferred.resolve(_identity);
         }, function error() {
@@ -33,11 +32,11 @@
       return deferred.promise;
     };
 
-    var getIdentity = function() {
+    const getIdentity = () => {
       return _identity;
     };
 
-    var redirectToRoot = function() {
+    const redirectToRoot = () => {
       $window.location.href = '/#/';
     };
 

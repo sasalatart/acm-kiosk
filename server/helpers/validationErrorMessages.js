@@ -1,15 +1,15 @@
 module.exports = (err, req, res, next) => {
-  var errors = { messages: [] };
+  const errors = { messages: [] };
 
   if (err.name === 'ValidationError') {
-    var messages = {
+    const messages = {
       'min': ' is below minimum.',
       'max': ' is above maximum.',
       'required': ' is required.'
     };
 
-    Object.keys(err.errors).forEach(function(field) {
-      var eObj = err.errors[field];
+    Object.keys(err.errors).forEach(field => {
+      const eObj = err.errors[field];
       errors.messages.push(eObj.properties.path + messages[eObj.properties.type]);
     });
 

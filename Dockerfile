@@ -1,8 +1,7 @@
-FROM node:5-onbuild
+FROM node:7-onbuild
 
 MAINTAINER Sebastian Salata R-T <SA.SalataRT@GMail.com>
 
-RUN npm install -g bower
-RUN bower install --allow-root
+RUN npm install -g bower && bower install --allow-root
 
 EXPOSE 8888

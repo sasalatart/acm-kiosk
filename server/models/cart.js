@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var productSchema = require('./product').schema;
+const mongoose = require('mongoose');
+const productSchema = require('./product').schema;
 
-var cartSchema = mongoose.Schema({
+const cartSchema = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now,

@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var productSchema = mongoose.Schema({
+const productSchema = mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -41,7 +41,7 @@ var productSchema = mongoose.Schema({
 });
 
 productSchema.methods.notAdminToJSON = function() {
-  var object = this.toObject();
+  let object = this.toObject();
   delete object.costPerPack;
   delete object.price;
   delete object.boughtLastTime;

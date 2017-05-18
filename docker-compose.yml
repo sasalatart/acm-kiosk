@@ -9,9 +9,8 @@ web:
   links:
     - mongo_db
   environment:
-    - ACM_KIOSK_HOST
-    - ACM_KIOSK_PORT
-    - ACM_KIOSK_FB_CLIENT_ID
-    - ACM_KIOSK_FB_CLIENT_SECRET
-    - COOKIE_SECRET
-    - SESSION_SECRET
+    - HOST
+    - PORT
+    - FB_CLIENT_ID
+    - FB_CLIENT_SECRET
+    - SECRET_TOKEN

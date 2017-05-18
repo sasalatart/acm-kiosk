@@ -6,24 +6,20 @@
   userController.$inject = ['sessionService', 'errorService', 'User'];
 
   function userController(sessionService, errorService, User) {
-    var vm = this;
+    const vm = this;
     vm.sessionService = sessionService;
 
-    sessionService.identity().then(function(identity) {
+    sessionService.identity().then(identity => {
       if (!identity) {
         sessionService.redirectToRoot();
         swal('Oops...', '¡Debes iniciar sesión para hacer esto!', 'error');
       } else {
-        User.query(function(users) {
-          vm.users = users;
-        });
+        User.query(users => vm.users = users);
 
-        vm.toggleAdmin = function(user) {
-          user.$toggleAdmin({
-            id: user._id
-          }, function(updatedUser) {
+        vm.toggleAdmin = user => {
+          user.$toggleAdmin({ id: user._id }, updatedUser => {
             user.admin = updatedUser.admin;
-          }, function(error) {
+          }, error => {
             errorService.handler(error.data);
           });
         };

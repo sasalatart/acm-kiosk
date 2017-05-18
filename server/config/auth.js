@@ -1,9 +1,9 @@
-var secrets = require('./secrets');
+const config = require('.');
 
 module.exports = {
   facebookAuth: {
-    'clientID': secrets.FB_CLIENT_ID,
-    'clientSecret': secrets.FB_CLIENT_SECRET,
-    'callbackURL': 'http://' + secrets.APP_HOST + ':' + secrets.APP_PORT + '/auth/facebook/callback'
+    'clientID': config.FB_CLIENT_ID,
+    'clientSecret': config.FB_CLIENT_SECRET,
+    'callbackURL': `http://${config.HOST}:${config.PORT}/auth/facebook/callback`
   }
 };

@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var _ = require('underscore');
+const mongoose = require('mongoose');
+const _ = require('underscore');
 
-var userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
   facebook: {
     id: {
       type: String,
@@ -48,7 +48,7 @@ userSchema.methods.toggleAdmin = function() {
 };
 
 userSchema.methods.toJSON = function() {
-  var object = this.toObject();
+  let object = this.toObject();
   delete object.facebook.token;
   return object;
 };

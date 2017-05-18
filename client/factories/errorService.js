@@ -4,8 +4,8 @@
   angular.module('acmKiosk').service('errorService', errorService);
 
   function errorService() {
-    var handler = function(errors) {
-      swal('Oops...', errors.messages.reduce(function(message, error) {
+    const handler = errors => {
+      swal('Oops...', errors.messages.reduce((message, error) => {
         return message + '\n' + error;
       }), 'error');
     };
