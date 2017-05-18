@@ -1,13 +1,15 @@
-var gulp = require('gulp');
-var browserify = require('gulp-browserify');
-var autoprefixer = require('gulp-autoprefixer');
-var minifyCSS = require('gulp-minify-css');
-var uglifyCSS = require('gulp-uglifycss');
-var minifyHTML = require('gulp-minify-html');
-var rename = require('gulp-rename');
+const gulp = require('gulp');
+const babel = require('gulp-babel');
+const browserify = require('gulp-browserify');
+const autoprefixer = require('gulp-autoprefixer');
+const minifyCSS = require('gulp-minify-css');
+const uglifyCSS = require('gulp-uglifycss');
+const minifyHTML = require('gulp-minify-html');
+const rename = require('gulp-rename');
 
 gulp.task('build-js', () => {
   gulp.src('client/app.js')
+    .pipe(babel({presets: ['es2015']}))
     .pipe(browserify({ insertGlobals: true }))
     .pipe(gulp.dest('client/public/scripts'));
 });
